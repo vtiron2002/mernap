@@ -7,14 +7,13 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const path = require('path');
 const { checkTokenSetData, isLoggedIn } = require('./middlewares/middlewares');
-const { NODE_ENV, MONGOOSE_URI } = require('./env');
 
 const app = express();
 
 const port = process.env.PORT || 8080;
 
 mongoose.connect(
-	process.env.MONGODB_URI || MONGOOSE_URI,
+	process.env.MONGODB_URI || process.env.MONGOOSE_URI,
 	{ useUnifiedTopology: true, useNewUrlParser: true },
 	() => console.log('Database started'),
 );

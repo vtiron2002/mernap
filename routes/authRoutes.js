@@ -5,13 +5,11 @@ const jwt = require('jsonwebtoken');
 
 const Users = require('../models/Users');
 
-const { JWT_SECRET } = require('../env');
-
 const createTokenSendRes = async (user, res) => {
 	try {
 		const token = await jwt.sign(
 			{ name: user.name, email: user.email },
-			JWT_SECRET,
+			process.env.JWT_SECRET,
 			{ expiresIn: '1h' },
 		);
 		res.json({ token });
@@ -66,7 +64,7 @@ route.post('/login', async (req, res) => {
 route.post('/checkJWT', (req, res) => {
 	const token = req.body.token;
 	if (token) {
-		jwt.verify(token, JWT_SECRET, (err, user) => {
+		jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
 			if (err) {
 				res.json({ err });
 			} else {
