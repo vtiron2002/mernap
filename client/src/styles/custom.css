@@ -1,0 +1,13 @@
+body {
+  background: #ccc !important;
+}
+
+.card {
+  border-radius: 8px !important;  
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+}
+
+.custom-file-input {
+  cursor: pointer;
+}
+
