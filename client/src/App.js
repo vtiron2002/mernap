@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	Redirect,
-} from 'react-router-dom';
-import Header from './components/Header';
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import Header from './components/Header'
 
-import Register from './pages/Register';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import Register from './pages/Register'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
 
 export default function App() {
-	const [user, setUser] = useState({});
+	const [user, setUser] = useState({})
+	const [userLoading, setUserLoading] = useState(false)
 
 	useEffect(() => {
+		setUserLoading(true)
 		if (localStorage.token) {
 			fetch('/data/get', {
 				headers: {
@@ -23,29 +20,26 @@ export default function App() {
 			})
 				.then((res) => res.json())
 				.then((user) => {
-					setUser(user);
-				});
+					setUser(user)
+					setUserLoading(false)
+				})
 		}
-	}, []);
+	}, [])
 
 	return (
 		<Router>
 			<Header usersName={user.name} />
 			<Switch>
 				<Route path='/register'>
-					{localStorage.token ? <Redirect to='/dashboard' /> : <Register />}
+					<Register />
 				</Route>
 				<Route path='/login'>
-					{localStorage.token ? <Redirect to='/dashboard' /> : <Login />}
+					<Login />
 				</Route>
 				<Route exact path='/dashboard'>
-					{localStorage.token ? (
-						<Dashboard user={user} setUser={setUser} />
-					) : (
-						<Redirect to='/login' />
-					)}
+					<Dashboard user={user} setUser={setUser} userLoading={userLoading} />
 				</Route>
 			</Switch>
 		</Router>
-	);
+	)
 }

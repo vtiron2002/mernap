@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import EditProfile from '../components/Dashboard/EditProfile'
 import ProfileInfo from '../components/Dashboard/ProfileInfo'
 import Notes from '../components/Dashboard/Notes'
 
-export default function Dashboard({ user, setUser }) {
+export default function Dashboard({ user, setUser, userLoading }) {
 	const [newNote, setNewNote] = useState({
 		name: '',
 		note: '',
@@ -79,27 +80,49 @@ export default function Dashboard({ user, setUser }) {
 		setEditProfile(!editProfile)
 	}
 
-	return (
-		<div className='container my-4 d-flex flex-column justify-content-center align-items-center p-0'>
-			<ProfileInfo user={user} toggleEdit={toggleEdit} changesSavedMessage={changesSavedMessage} />
+	if (localStorage.token) {
+		if (userLoading) {
+			return (
+				<div className='container mt-4 text-center'>
+					<div
+						style={{ height: '100px', width: '100px' }}
+						className='spinner-border text-primary '
+						role='status'
+					>
+						<span className='sr-only'>Loading...</span>
+					</div>
+				</div>
+			)
+		} else {
+			return (
+				<div className='container my-4 d-flex flex-column justify-content-center align-items-center p-0'>
+					<ProfileInfo
+						user={user}
+						toggleEdit={toggleEdit}
+						changesSavedMessage={changesSavedMessage}
+					/>
 
-			{editProfile && (
-				<EditProfile
-					user={user}
-					setUser={setUser}
-					setChangesSavedMessage={setChangesSavedMessage}
-					toggleEdit={toggleEdit}
-				/>
-			)}
+					{editProfile && (
+						<EditProfile
+							user={user}
+							setUser={setUser}
+							setChangesSavedMessage={setChangesSavedMessage}
+							toggleEdit={toggleEdit}
+						/>
+					)}
 
-			<Notes
-				user={user}
-				removeNote={removeNote}
-				addNewNote={addNewNote}
-				noteError={noteError}
-				onChange={onChange}
-				newNote={newNote}
-			/>
-		</div>
-	)
+					<Notes
+						user={user}
+						removeNote={removeNote}
+						addNewNote={addNewNote}
+						noteError={noteError}
+						onChange={onChange}
+						newNote={newNote}
+					/>
+				</div>
+			)
+		}
+	} else {
+		return <Redirect to='/login' />
+	}
 }
