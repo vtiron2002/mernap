@@ -35,23 +35,23 @@ export default function DeleteAccount({ modal, setModal, user }) {
 
 	return (
 		<div
-			class='modal customModal'
+			className='modal customModal'
 			style={{
 				display: modal ? 'flex' : 'none',
 				opacity: modal ? '100%' : '0',
 			}}
 		>
-			<div class='modal-dialog customModalDialog'>
-				<div class='modal-content'>
-					<div class='modal-header'>
-						<h5 class='modal-title' id='exampleModalLabel'>
+			<div className='modal-dialog customModalDialog'>
+				<div className='modal-content'>
+					<div className='modal-header'>
+						<h5 className='modal-title' id='exampleModalLabel'>
 							Are you sure you want to delete your account?
 						</h5>
-						<button onClick={closeModal} type='button' class='close'>
+						<button onClick={closeModal} type='button' className='close'>
 							<span>&times;</span>
 						</button>
 					</div>
-					<div class='modal-body'>
+					<div className='modal-body'>
 						<form>
 							<div className='form-group'>
 								<label>
@@ -68,11 +68,11 @@ export default function DeleteAccount({ modal, setModal, user }) {
 							</div>
 						</form>
 					</div>
-					<div class='modal-footer'>
-						<button onClick={closeModal} type='button' class='btn btn-success'>
+					<div className='modal-footer'>
+						<button onClick={closeModal} type='button' className='btn btn-success'>
 							Cancel
 						</button>
-						<button onClick={deleteAccount} type='button' class='btn btn-danger'>
+						<button onClick={deleteAccount} type='button' className='btn btn-danger'>
 							Delete
 						</button>
 					</div>

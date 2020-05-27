@@ -1,24 +1,70 @@
-body {
-  background: #ccc !important;
+* {
+	box-sizing: border-box;
 }
 
+body {
+	background: #ccc !important;
+	height: 100vh;
+	display: flex;
+
+}
+
+#root {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
 .card {
-  border-radius: 8px !important;  
-  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+	border-radius: 8px !important;
+	box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
 }
 
 .custom-file-input {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .customModal {
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	background: rgba(0, 0, 0, 0.5);
 }
 
 .customModalDialog {
-  width: 70% !important;
-  max-width: 70% !important;
-  height: 400px !important;
+	width: 70% !important;
+	max-width: 70% !important;
+	height: 400px !important;
+}
+
+
+/* DASHBOARD CONTAINER */
+
+:root {
+	--gridGap: 2rem;
+}
+
+.dashboardContainer {
+	display: grid;
+	gap: var(--gridGap);
+	padding: 2rem 0;
+	grid-template-columns: 1fr;
+	grid-template-rows: repeat(auto-fit, minmax(1fr, 350px));
+	margin: 0 auto;
+	width: 1140px;
+}
+
+.profileInfoContainer {
+	display: grid;
+	grid-template-columns: 20% auto;
+	gap: var(--gridGap);
+}
+
+.editProfileContainer {
+	display: grid;
+	grid-template-columns: 100%;
+}
+
+.noteContainer {
+	display: grid;
+	grid-template-columns: 30% auto;
+	gap: var(--gridGap);
 }

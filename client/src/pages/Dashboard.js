@@ -30,8 +30,8 @@ export default function Dashboard({ user, setUser, userLoading }) {
 			})
 	}, [])
 
-	const onChange = (e) => {
-		setNewNote({ ...newNote, [e.target.id]: e.target.value })
+	const onChange = ({ target: { id, value } }) => {
+		setNewNote({ ...newNote, [id]: value })
 	}
 
 	const addNewNote = (e) => {
@@ -83,7 +83,7 @@ export default function Dashboard({ user, setUser, userLoading }) {
 	if (localStorage.token) {
 		if (userLoading) {
 			return (
-				<div className='container mt-4 text-center'>
+				<div className='container py-4 h-100 text-center d-flex flex-column align-items-center justify-content-center'>
 					<div
 						style={{ height: '100px', width: '100px' }}
 						className='spinner-border text-primary '
@@ -91,11 +91,14 @@ export default function Dashboard({ user, setUser, userLoading }) {
 					>
 						<span className='sr-only'>Loading...</span>
 					</div>
+					<a href='/dashboard' className='btn btn-success mt-4 text-white'>
+						Refresh Page
+					</a>
 				</div>
 			)
 		} else {
 			return (
-				<div className='container my-4 d-flex flex-column justify-content-center align-items-center p-0'>
+				<div className='dashboardContainer'>
 					<ProfileInfo
 						user={user}
 						toggleEdit={toggleEdit}

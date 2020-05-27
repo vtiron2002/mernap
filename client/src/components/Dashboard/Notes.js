@@ -1,16 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-export default function Notes({
-	user,
-	removeNote,
-	addNewNote,
-	noteError,
-	onChange,
-	newNote,
-}) {
+export default function Notes({ user, removeNote, addNewNote, noteError, onChange, newNote }) {
 	return (
-		<div style={{ height: '350px', maxHeight: '350px' }} className='row w-100'>
-			<div className='col-md-4 h-100'>
+		<>
+			<div className='noteContainer'>
 				<div className='card h-100'>
 					<div className='card-header d-flex justify-content-between align-items-center'>
 						<div>New note</div>
@@ -39,16 +32,12 @@ export default function Notes({
 						</form>
 					</div>
 				</div>
-			</div>
 
-			<div className='col-md-8 h-100'>
 				<div className='card h-100'>
 					<div className='card-header d-flex justify-content-between align-items-center'>
 						<h5>Your notes</h5>
 						<h4 className='m-0'>
-							{user.notes && (
-								<span className='badge badge-primary'>{user.notes.length}</span>
-							)}
+							{user.notes && <span className='badge badge-primary'>{user.notes.length}</span>}
 						</h4>
 					</div>
 					<div className='card-body overflow-auto'>
@@ -81,6 +70,6 @@ export default function Notes({
 					</div>
 				</div>
 			</div>
-		</div>
-	);
+		</>
+	)
 }
