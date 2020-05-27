@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import EditProfile from '../components/Dashboard/EditProfile';
-import ProfileInfo from '../components/Dashboard/ProfileInfo';
-import Notes from '../components/Dashboard/Notes';
+import React, { useState, useEffect } from 'react'
+import EditProfile from '../components/Dashboard/EditProfile'
+import ProfileInfo from '../components/Dashboard/ProfileInfo'
+import Notes from '../components/Dashboard/Notes'
 
 export default function Dashboard({ user, setUser }) {
 	const [newNote, setNewNote] = useState({
 		name: '',
 		note: '',
-	});
-	const [noteError, setNoteError] = useState('');
-	const [editProfile, setEditProfile] = useState(false);
-	const [changesSavedMessage, setChangesSavedMessage] = useState('');
+	})
+	const [noteError, setNoteError] = useState('')
+	const [editProfile, setEditProfile] = useState(false)
+	const [changesSavedMessage, setChangesSavedMessage] = useState('')
 
 	useEffect(() => {
-		const token = localStorage.token;
+		const token = localStorage.token
 		fetch('/auth/checkJWT', {
 			method: 'POST',
 			headers: {
@@ -24,24 +24,24 @@ export default function Dashboard({ user, setUser }) {
 			.then((res) => res.json())
 			.then((res) => {
 				if (res.err) {
-					delete localStorage.token;
+					delete localStorage.token
 				}
-			});
-	}, []);
+			})
+	}, [])
 
 	const onChange = (e) => {
-		setNewNote({ ...newNote, [e.target.id]: e.target.value });
-	};
+		setNewNote({ ...newNote, [e.target.id]: e.target.value })
+	}
 
 	const addNewNote = (e) => {
-		e.preventDefault();
+		e.preventDefault()
 		if (!newNote.name.trim('') || !newNote.note.trim('')) {
-			setNoteError('Fill both out');
+			setNoteError('Fill both out')
 		} else {
 			const body = {
 				...newNote,
 				created_at: new Date(),
-			};
+			}
 			fetch('/data/addNote', {
 				method: 'POST',
 				headers: {
@@ -52,15 +52,15 @@ export default function Dashboard({ user, setUser }) {
 			})
 				.then((res) => res.json())
 				.then((res) => {
-					setUser({ ...user, notes: [...user.notes, res] });
-				});
+					setUser({ ...user, notes: [...user.notes, res] })
+				})
 			setNewNote({
 				name: '',
 				note: '',
-			});
-			setNoteError('');
+			})
+			setNoteError('')
 		}
-	};
+	}
 
 	const removeNote = (date) => {
 		fetch('/data/removeNote', {
@@ -72,20 +72,16 @@ export default function Dashboard({ user, setUser }) {
 			body: JSON.stringify({ date }),
 		})
 			.then((res) => res.json())
-			.then((res) => setUser({ ...user, notes: res }));
-	};
+			.then((res) => setUser({ ...user, notes: res }))
+	}
 
 	const toggleEdit = () => {
-		setEditProfile(!editProfile);
-	};
+		setEditProfile(!editProfile)
+	}
 
 	return (
 		<div className='container my-4 d-flex flex-column justify-content-center align-items-center p-0'>
-			<ProfileInfo
-				user={user}
-				toggleEdit={toggleEdit}
-				changesSavedMessage={changesSavedMessage}
-			/>
+			<ProfileInfo user={user} toggleEdit={toggleEdit} changesSavedMessage={changesSavedMessage} />
 
 			{editProfile && (
 				<EditProfile
@@ -105,5 +101,5 @@ export default function Dashboard({ user, setUser }) {
 				newNote={newNote}
 			/>
 		</div>
-	);
+	)
 }

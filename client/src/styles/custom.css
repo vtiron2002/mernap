@@ -11,3 +11,14 @@ body {
   cursor: pointer;
 }
 
+.customModal {
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.customModalDialog {
+  width: 70% !important;
+  max-width: 70% !important;
+  height: 400px !important;
+}

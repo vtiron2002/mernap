@@ -1,21 +1,20 @@
-const express = require('express');
-const route = express.Router();
+const express = require('express')
+const route = express.Router()
 
-const Users = require('../models/Users');
+const Users = require('../models/Users')
 
 route.get('/get', async (req, res) => {
-	const email = req.user.email;
+	const email = req.user.email
 
-	Users.find({ email }, (err, userInfo) => {
-		res.json(userInfo[0]);
-	});
-});
+	const user = await Users.findOne({ email })
+	res.json(user)
+})
 
 route.post('/addNote', (req, res) => {
-	const email = req.user.email;
+	const email = req.user.email
 	const newNote = {
 		...req.body,
-	};
+	}
 
 	Users.find({ email }, (err, prevUser) => {
 		Users.updateOne(
@@ -30,17 +29,17 @@ route.post('/addNote', (req, res) => {
 					// res.json({newNote})
 				}
 			},
-		);
-		res.json(newNote);
-	});
-});
+		)
+		res.json(newNote)
+	})
+})
 
 route.delete('/removeNote', (req, res) => {
-	const email = req.user.email;
-	const date = req.body.date;
+	const email = req.user.email
+	const date = req.body.date
 	Users.findOne({ email }, (err, user) => {
-		const oldNotes = user.notes;
-		const newNotes = oldNotes.filter((note) => note.created_at !== date);
+		const oldNotes = user.notes
+		const newNotes = oldNotes.filter((note) => note.created_at !== date)
 		Users.updateOne(
 			{ email },
 			{
@@ -49,22 +48,34 @@ route.delete('/removeNote', (req, res) => {
 				},
 			},
 			(err, result) => {},
-		);
-		res.json(newNotes);
-	});
-});
+		)
+		res.json(newNotes)
+	})
+})
 
 route.post('/editProfile', (req, res) => {
-	const email = req.user.email;
-	const data = req.body;
+	const email = req.user.email
+	const data = req.body
 
 	Users.updateOne({ email }, { $set: data }, (err, result) => {
 		if (err) {
-			res.json(err);
+			res.json(err)
 		} else {
-			res.json(result);
+			res.json(result)
 		}
-	});
-});
+	})
+})
 
-module.exports = route;
+route.post('/deleteAccount', (req, res) => {
+	const { id } = req.body
+	console.log(id)
+	Users.deleteOne({ _id: id }, (err, result) => {
+		if (err) {
+			console.log('err', err)
+		} else {
+			res.json({ status: 'ok' })
+		}
+	})
+})
+
+module.exports = route

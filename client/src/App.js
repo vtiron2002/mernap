@@ -24,7 +24,6 @@ export default function App() {
 				.then((res) => res.json())
 				.then((user) => {
 					setUser(user);
-					console.log('got user data!')
 				});
 		}
 	}, []);

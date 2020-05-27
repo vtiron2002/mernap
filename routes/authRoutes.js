@@ -1,26 +1,23 @@
-const express = require('express');
-const route = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const express = require('express')
+const route = express.Router()
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
-const Users = require('../models/Users');
+const Users = require('../models/Users')
 
 const createTokenSendRes = async (user, res) => {
 	try {
-		const token = await jwt.sign(
-			{ name: user.name, email: user.email },
-			process.env.JWT_SECRET,
-			{ expiresIn: '1h' },
-		);
-		res.json({ token });
+		const token = await jwt.sign({ name: user.name, email: user.email }, process.env.JWT_SECRET, {
+			expiresIn: '1h',
+		})
+		res.json({ token })
 	} catch (e) {
-		res.json({ err: e.message });
+		res.json({ err: e.message })
 	}
-
-};
+}
 
 route.post('/register', (req, res) => {
-	const { name, email, password, confirmPassword } = req.body;
+	const { name, email, password, confirmPassword } = req.body
 	if (password === confirmPassword) {
 		Users.find({ email }, (err, result) => {
 			if (result.length === 0) {
@@ -29,49 +26,48 @@ route.post('/register', (req, res) => {
 						name,
 						email,
 						password: hashedPassword,
-					};
+					}
 
 					Users.create(newUser, (err, user) => {
-						createTokenSendRes(user, res);
-					});
-				});
+						createTokenSendRes(user, res)
+					})
+				})
 			} else {
-				res.json({ message: `An account with that email already exists.` });
+				res.json({ message: `An account with that email already exists.` })
 			}
-		});
+		})
 	} else {
-		res.send({ message: `Passwords don't match.` });
+		res.send({ message: `Passwords don't match.` })
 	}
-});
+})
 
 route.post('/login', async (req, res) => {
-	const { email, password } = await req.body;
+	const { email, password } = await req.body
 
 	try {
-		const user = await Users.findOne({ email });
-		if (!user) throw Error(`Account with that email doesn't exist.`);
+		const user = await Users.findOne({ email })
+		if (!user) throw Error(`Account with that email doesn't exist.`)
 
-		const isMatch = await bcrypt.compare(password, user.password);
-		if (!isMatch) throw Error(`Password isn't correct`);
+		const isMatch = await bcrypt.compare(password, user.password)
+		if (!isMatch) throw Error(`Password isn't correct`)
 
-		createTokenSendRes(user, res);
+		createTokenSendRes(user, res)
 	} catch (e) {
-		res.json({ message: e.message });
+		res.json({ message: e.message })
 	}
-
-});
+})
 
 route.post('/checkJWT', (req, res) => {
-	const token = req.body.token;
+	const token = req.body.token
 	if (token) {
 		jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
 			if (err) {
-				res.json({ err });
+				res.json({ err })
 			} else {
-				res.json({ user });
+				res.json({ user })
 			}
-		});
+		})
 	}
-});
+})
 
-module.exports = route;
+module.exports = route

@@ -6,29 +6,34 @@ export default function Login() {
 		email: '',
 		password: '',
 	});
-	const [error, setError] = useState('')
+	const [error, setError] = useState('');
 
 	const onChange = (e) => {
 		setLoginInfo({ ...loginInfo, [e.target.id]: e.target.value });
-  };
-  
-  const onSubmit = e => {
-		e.preventDefault()
+	};
+
+	const onSubmit = (e) => {
+		e.preventDefault();
 		fetch('/auth/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(loginInfo)
-		}).then(res => res.json()).then(res => {
-			if (res.message) {
-				setError(res.message)
-			} else {
-				localStorage.token = res.token
-				window.location.href = '/dashboard'
-			}
-		});
-  }
+			body: JSON.stringify(loginInfo),
+		})
+			.then((res) => res.json())
+			.then((res) => {
+				if (res.message) {
+					setError(res.message);
+					setTimeout(() => {
+						setError('');
+					}, 2000);
+				} else {
+					localStorage.token = res.token;
+					window.location.href = '/dashboard';
+				}
+			});
+	};
 
 	return (
 		<div

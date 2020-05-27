@@ -28,6 +28,9 @@ export default function Register() {
 			.then((res) => {
 				if (res.message) {
 					setError(res.message);
+					setTimeout(() => {
+						setError('');
+					}, 2000);
 				} else {
 					localStorage.token = res.token;
 					window.location.href = '/dashboard';
