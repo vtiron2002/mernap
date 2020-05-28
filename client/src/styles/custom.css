@@ -6,7 +6,6 @@ body {
 	background: #ccc !important;
 	height: 100vh;
 	display: flex;
-
 }
 
 #root {
@@ -35,7 +34,6 @@ body {
 	height: 400px !important;
 }
 
-
 /* DASHBOARD CONTAINER */
 
 :root {
@@ -45,10 +43,9 @@ body {
 .dashboardContainer {
 	display: grid;
 	gap: var(--gridGap);
-	padding: 2rem 0;
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(auto-fit, minmax(1fr, 350px));
-	margin: 0 auto;
+	margin: 2rem auto;
 	width: 1140px;
 }
 
