@@ -57,34 +57,30 @@ export default function Posts({ user, setUser }) {
 		<div className='postsContainer'>
 			<div className='card border-0'>
 				<div className='card-header' style={{ borderBottom: '3px solid #227EFF' }}>
-					<div className='row no-gutters'>
-						<div className='col-md-1 d-flex justify-content-center align-items-center'>
-							<img
-								src={user.profilePic ? user.profilePic : placeholderImage}
-								className='rounded-circle'
-								style={{ height: '80px', width: '80px', objectFit: 'cover', background: 'grey' }}
-								alt=''
-							/>
-						</div>
-						<div className='col-md-11'>
-							<form>
-								<div className='input-group'>
-									<textarea
-										value={postContent}
-										onChange={onChange}
-										name='postContent'
-										placeholder='Write a post/nappy...'
-										className='form-control border-0 bg-light'
-									/>
-									<div className='input-group-append'>
-										<button disabled={loading} onClick={addNewPost} className='btn btn-primary'>
-											Post
-										</button>
-									</div>
+					<div className='d-flex align-items-stretch'>
+						<img
+							src={user.profilePic ? user.profilePic : placeholderImage}
+							className='rounded-circle'
+							style={{ height: '80px', width: '80px', objectFit: 'cover', background: 'grey' }}
+							alt=''
+						/>
+						<form className='flex-fill'>
+							<div className='input-group h-100'>
+								<textarea
+									style={{ outlineColor: error && '#dc3545' }}
+									value={postContent}
+									onChange={onChange}
+									name='postContent'
+									placeholder={error ? error : 'Write a post/nappy...'}
+									className={`form-control border-0 bg-light ${error && 'is-invalid'}`}
+								/>
+								<div className='input-group-append'>
+									<button disabled={loading} onClick={addNewPost} className='btn btn-primary'>
+										Post
+									</button>
 								</div>
-							</form>
-							<span className='text-danger'>{error}</span>
-						</div>
+							</div>
+						</form>
 					</div>
 				</div>
 
@@ -118,7 +114,7 @@ export default function Posts({ user, setUser }) {
 							</div>
 						))
 					) : (
-						<h5 className='text-muted p-4'>You have no posts</h5>
+						<h5 className='text-muted p-4'>You have no nappies</h5>
 					)}
 				</div>
 			</div>

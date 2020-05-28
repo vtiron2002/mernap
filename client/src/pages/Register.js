@@ -98,6 +98,7 @@ export default function Register() {
 						<button type='submit' className='btn btn-primary'>
 							Register
 						</button>
+						<br hidden/>
 
 						<span className='mx-3'>
 							Already have an account? <Link to='/login'>Login here</Link>

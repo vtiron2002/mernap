@@ -1,0 +1,78 @@
+/* DASHBOARD */
+@media (max-width: 1200px) {
+	:root {
+		font-size: 14px;
+	}
+
+	.dashboardContainer {
+		width: 95%;
+		margin: 0 auto;
+	}
+}
+
+@media (max-width: 950px) {
+	.profileInfoContainer {
+		grid-template-columns: 200px auto;
+	}
+}
+
+@media (max-width: 660px) {
+	:root {
+		font-size: 12px;
+	}
+
+	.profileInfoContainer {
+		grid-template-columns: 1fr;
+		gap: 0;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
+	.profileInfoContainer img {
+		object-fit: contain !important;
+	}
+
+	.profileInfoContainer div {
+		border-radius: 0 !important;
+	}
+
+	.profileInfoContainer div:nth-child(1) {
+		border: none;
+	}
+
+	/* Removes first card's name and bio */
+	.overflow-hidden > div:nth-child(2) {
+		display: none;
+	}
+
+	.noteContainer {
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr 2fr;
+	}
+}
+
+@media (max-width: 355px) {
+	.profileInfoContainer .card-footer {
+		flex-direction: column;
+		align-items: flex-start !important;
+	}
+}
+
+/* REGISTER PAGE */
+@media (max-width: 377px) {
+  .card > form:nth-child(3) > br:nth-child(6) {
+    display: block !important;
+  }
+
+  span.mx-3 {
+    margin: 0 !important;
+  }
+}
+
+/* LOGIN PAGE */
+
+@media (max-width: 600px) {
+  .card {
+    width: 90% !important;
+  }
+}

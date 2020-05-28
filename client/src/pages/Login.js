@@ -9,8 +9,8 @@ export default function Login() {
 	const [error, setError] = useState('')
 	const [loading, setLoading] = useState(false)
 
-	const onChange = (e) => {
-		setLoginInfo({ ...loginInfo, [e.target.id]: e.target.value })
+	const onChange = ({target: {value, id}}) => {
+		setLoginInfo({ ...loginInfo, [id]: value })
 	}
 
 	const onLogin = (e) => {
@@ -39,11 +39,8 @@ export default function Login() {
 
 	if (!localStorage.token) {
 		return (
-			<div
-				style={{ height: '100%' }}
-				className='container my-4 d-flex align-items-start justify-content-center'
-			>
-				<div className='card p-4 sm-w-50 shadow' style={{ width: '400px' }}>
+			<div className='container my-4 d-flex align-items-center justify-content-center'>
+				<div className='card p-4 shadow' style={{width: '500px'}}>
 					<h2 className='text-center m-0'>Log in</h2>
 					<hr />
 
@@ -54,7 +51,6 @@ export default function Login() {
 								id='email'
 								type='email'
 								className='form-control'
-								required
 								onChange={onChange}
 								value={loginInfo.email}
 							/>
@@ -65,7 +61,6 @@ export default function Login() {
 								id='password'
 								type='password'
 								className='form-control'
-								required
 								onChange={onChange}
 								value={loginInfo.password}
 							/>

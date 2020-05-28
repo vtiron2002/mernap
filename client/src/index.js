@@ -6,6 +6,7 @@ import App from './App'
 // import './styles/bootswatch.min.css'
 import './styles/custom.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './styles/responsive.css'
 
 render(
   <App />,

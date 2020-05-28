@@ -45,11 +45,14 @@ route.post('/login', async (req, res) => {
 	const { email, password } = await req.body
 
 	try {
+		if (!email.trim()) throw Error('Email missing')
+		if (!password.trim()) throw Error('Password missing')
+
 		const user = await Users.findOne({ email })
-		if (!user) throw Error(`Account with that email doesn't exist.`)
+		if (!user) throw Error(`There is no account with that email`)
 
 		const isMatch = await bcrypt.compare(password, user.password)
-		if (!isMatch) throw Error(`Password isn't correct`)
+		if (!isMatch) throw Error(`Incorrect credentials`)
 
 		createTokenSendRes(user, res)
 	} catch (e) {
