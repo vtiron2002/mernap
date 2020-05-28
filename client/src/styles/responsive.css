@@ -72,7 +72,7 @@
 /* LOGIN PAGE */
 
 @media (max-width: 600px) {
-  .card {
+  .login .card {
     width: 90% !important;
   }
 }

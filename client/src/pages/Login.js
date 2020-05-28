@@ -39,7 +39,7 @@ export default function Login() {
 
 	if (!localStorage.token) {
 		return (
-			<div className='container my-4 d-flex align-items-center justify-content-center'>
+			<div className='login container my-4 d-flex align-items-center justify-content-center'>
 				<div className='card p-4 shadow' style={{width: '500px'}}>
 					<h2 className='text-center m-0'>Log in</h2>
 					<hr />
