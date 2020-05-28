@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import EditProfile from '../components/Dashboard/EditProfile'
 import ProfileInfo from '../components/Dashboard/ProfileInfo'
 import Notes from '../components/Dashboard/Notes'
+import Posts from '../components/Dashboard/Posts'
 
 export default function Dashboard({ user, setUser, userLoading }) {
 	const [newNote, setNewNote] = useState({
@@ -113,6 +114,8 @@ export default function Dashboard({ user, setUser, userLoading }) {
 							toggleEdit={toggleEdit}
 						/>
 					)}
+
+					<Posts user={user} setUser={setUser} />
 
 					<Notes
 						user={user}

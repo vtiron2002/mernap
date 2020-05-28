@@ -41,7 +41,7 @@ export default function Login() {
 		return (
 			<div
 				style={{ height: '100%' }}
-				className='container my-4 d-flex align-items-center justify-content-center'
+				className='container my-4 d-flex align-items-start justify-content-center'
 			>
 				<div className='card p-4 sm-w-50 shadow' style={{ width: '400px' }}>
 					<h2 className='text-center m-0'>Log in</h2>

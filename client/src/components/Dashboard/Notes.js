@@ -46,7 +46,7 @@ export default function Notes({ user, removeNote, addNewNote, noteError, onChang
 						)}
 
 						{user.notes &&
-							user.notes.map((n) => (
+							[...user.notes].reverse().map((n) => (
 								<div key={n.created_at} className='card bg-light p-2 mb-2'>
 									<div className='d-flex justify-content-between align-items-center'>
 										<h6 className='m-0'>{n.name}</h6>

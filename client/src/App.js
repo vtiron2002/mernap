@@ -5,6 +5,8 @@ import Header from './components/Header'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import Test from './pages/Test'
+import Home from './pages/Home'
 
 export default function App() {
 	const [user, setUser] = useState({})
@@ -28,8 +30,12 @@ export default function App() {
 
 	return (
 		<Router>
-			<Header usersName={user.name} />
+			<Header usersName={user.name} userLoading={userLoading} />
+
 			<Switch>
+				<Route exact path='/'>
+					<Home />
+				</Route>
 				<Route path='/register'>
 					<Register />
 				</Route>
@@ -39,6 +45,9 @@ export default function App() {
 				<Route exact path='/dashboard'>
 					<Dashboard user={user} setUser={setUser} userLoading={userLoading} />
 				</Route>
+				{/* <Route path='/test'>
+					<Test user={user} />
+				</Route> */}
 			</Switch>
 		</Router>
 	)

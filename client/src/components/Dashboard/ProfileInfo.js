@@ -37,7 +37,7 @@ export default function ProfileInfo({ user, toggleEdit, changesSavedMessage }) {
 						{changesSavedMessage && <span className='text-success'>{changesSavedMessage}</span>}
 					</div>
 
-					<div className='card-body'>
+					<div className='card-body overflow-auto'>
 						<h5 className='card-title'>{user.name}</h5>
 						<p>{user.bio}</p>
 					</div>

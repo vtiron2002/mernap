@@ -11,6 +11,7 @@ const User = new Schema({
 	password: string,
 	date_created: { type: Date, default: Date.now },
 	notes: [],
+	posts: []
 });
 
 module.exports = mongoose.model('users', User);

@@ -58,6 +58,10 @@ body {
 	gap: var(--gridGap);
 }
 
+.profileInfoContainer > div {
+	max-height: 350px;
+}
+
 .editProfileContainer {
 	display: grid;
 	grid-template-columns: 100%;
@@ -67,4 +71,12 @@ body {
 	display: grid;
 	grid-template-columns: 30% auto;
 	gap: var(--gridGap);
+}
+
+.noteContainer > div {
+	max-height: 350px;
+}
+
+.postsContainer > div {
+	max-height: 400px;
 }

@@ -78,4 +78,47 @@ route.post('/deleteAccount', (req, res) => {
 	})
 })
 
+route.post('/addPost', (req, res) => {
+	const email = req.user.email
+	const newPost = {
+		...req.body,
+	}
+
+	Users.find({ email }, (err, prevUser) => {
+		Users.updateOne(
+			{ email },
+			{
+				$push: {
+					posts: [newPost],
+				},
+			},
+			(err, result) => {
+				if (result) {
+					// res.json({newNote})
+				}
+			},
+		)
+		res.json(newPost)
+	})
+})
+
+route.post('/deletePost', (req, res) => {
+	const email = req.user.email
+	const date = req.body.date
+	Users.findOne({ email }, (err, user) => {
+		const oldPosts = user.posts
+		const newPosts = oldPosts.filter((post) => post.dateCreated !== date)
+		Users.updateOne(
+			{ email },
+			{
+				$set: {
+					posts: newPosts,
+				},
+			},
+			(err, result) => {},
+		)
+		res.json(newPosts)
+	})
+})
+
 module.exports = route
