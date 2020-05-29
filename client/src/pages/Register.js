@@ -40,7 +40,7 @@ export default function Register() {
 
 	if (!localStorage.token) {
 		return (
-			<div className='container my-4 d-flex align-items-center justify-content-center'>
+			<div className='register container my-4 d-flex align-items-center justify-content-center'>
 				<div className='card p-4 w-100 shadow'>
 					<h2 className='text-center m-0'>Register</h2>
 					<hr />

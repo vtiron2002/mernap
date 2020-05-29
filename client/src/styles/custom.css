@@ -13,6 +13,12 @@ body {
 	flex-direction: column;
 	flex: 1;
 }
+
+.login, .register, .dashboardContainer {
+	position: relative;
+	top: 50px
+}
+
 .card {
 	border-radius: 8px !important;
 	box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
@@ -42,13 +48,11 @@ body {
 
 .dashboardContainer {
 	display: grid;
-	position: relative;
 	gap: var(--gridGap);
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(auto-fit, minmax(1fr, 350px));
 	margin: 2rem auto;
 	width: 1140px;
-	top: 50px
 }
 
 .profileInfoContainer {
