@@ -42,11 +42,13 @@ body {
 
 .dashboardContainer {
 	display: grid;
+	position: relative;
 	gap: var(--gridGap);
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(auto-fit, minmax(1fr, 350px));
 	margin: 2rem auto;
 	width: 1140px;
+	top: 50px
 }
 
 .profileInfoContainer {
