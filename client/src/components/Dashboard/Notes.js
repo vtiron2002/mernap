@@ -1,13 +1,48 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { UserContext } from '../../UserContext'
+import { customFetch } from '../../api/fetch'
 
-export default function Notes({ user, removeNote, addNewNote, noteError, onChange, newNote }) {
+export default function Notes() {
+	const { user, setUser } = useContext(UserContext)
+
+	const [newNote, setNewNote] = useState({
+		name: '',
+		note: '',
+	})
+
+	const onChange = ({ target: { id, value } }) => {
+		setNewNote({ ...newNote, [id]: value })
+	}
+
+	const addNewNote = async (e) => {
+		e.preventDefault()
+		const body = {
+			...newNote,
+			created_at: new Date(),
+		}
+		await customFetch({ method: 'POST', body, url: '/data/addNote' }).then((res) =>
+			setUser({ ...user, notes: [...user.notes, res] }),
+		)
+		setNewNote({
+			name: '',
+			note: '',
+		})
+	}
+
+	const removeNote = async (date) => {
+		await customFetch({
+			method: 'DELETE',
+			body: { date },
+			url: '/data/removeNote',
+		}).then((res) => setUser({ ...user, notes: res }))
+	}
+
 	return (
 		<>
 			<div className='noteContainer'>
 				<div className='card h-100'>
 					<div className='card-header d-flex justify-content-between align-items-center'>
 						<div>New note</div>
-						{noteError && <div className='text-danger m-0'>{noteError}</div>}
 					</div>
 
 					<div className='card-body'>
@@ -28,7 +63,12 @@ export default function Notes({ user, removeNote, addNewNote, noteError, onChang
 								id='note'
 								onChange={onChange}
 							/>
-							<button className='btn btn-success'>Add</button>
+							<button
+								disabled={!newNote.name.trim() || !newNote.note.trim()}
+								className='btn btn-success'
+							>
+								Add
+							</button>
 						</form>
 					</div>
 				</div>

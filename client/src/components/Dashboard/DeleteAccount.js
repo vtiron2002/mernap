@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { customFetch } from '../../api/fetch'
+import { Link } from 'react-router-dom'
+import { UserContext } from '../../UserContext'
 
 export default function DeleteAccount({ modal, setModal, user }) {
+	const { setUser } = useContext(UserContext)
+
 	const closeModal = () => {
 		setModal(false)
 	}
@@ -8,26 +13,22 @@ export default function DeleteAccount({ modal, setModal, user }) {
 	const [modalMsg, setModalMsg] = useState('')
 	const [email, setEmail] = useState('')
 
-	const deleteAccount = () => {
+	const deleteAccount = async () => {
 		try {
 			if (user.email !== email) throw Error(`Doesn't match email`)
 
 			setModalMsg('')
-			fetch('/data/deleteAccount', {
+			await customFetch({
+				url: '/data/deleteAccount',
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					authorization: `Bearer ${localStorage.token}`,
-				},
-				body: JSON.stringify({ id: user._id }),
+				body: { id: user._id },
+			}).then((res) => {
+				if (res.status === 'ok') {
+					delete localStorage.token
+					document.querySelector('#next').click()
+					setUser({})
+				}
 			})
-				.then((res) => res.json())
-				.then((res) => {
-					if (res.status === 'ok') {
-						delete localStorage.token
-						window.location.href = '/login'
-					}
-				})
 		} catch (e) {
 			setModalMsg(e.message)
 		}
@@ -42,6 +43,7 @@ export default function DeleteAccount({ modal, setModal, user }) {
 			}}
 		>
 			<div className='modal-dialog customModalDialog'>
+				<Link id='next' hidden to='/'></Link>
 				<div className='modal-content'>
 					<div className='modal-header'>
 						<h5 className='modal-title' id='exampleModalLabel'>

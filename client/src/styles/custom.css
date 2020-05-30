@@ -49,9 +49,10 @@ body {
 .dashboardContainer {
 	display: grid;
 	gap: var(--gridGap);
+	padding: 2rem 0;
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(auto-fit, minmax(1fr, 350px));
-	margin: 2rem auto;
+	margin: 0 auto;
 	width: 1140px;
 }
 

@@ -5,50 +5,41 @@ import Header from './components/Header'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
-import Test from './pages/Test'
 import Home from './pages/Home'
+
+import { UserContext } from './UserContext'
 
 export default function App() {
 	const [user, setUser] = useState({})
 	const [userLoading, setUserLoading] = useState(false)
 
 	useEffect(() => {
-		setUserLoading(true)
-		if (localStorage.token) {
-			fetch('/data/get', {
-				headers: {
-					authorization: `Bearer ${localStorage.token}`,
-				},
-			})
-				.then((res) => res.json())
-				.then((user) => {
-					setUser(user)
-					setUserLoading(false)
-				})
-		}
+		console.log('APP LOADED')
 	}, [])
 
 	return (
 		<Router>
-			<Header usersName={user.name} userLoading={userLoading} />
+			<UserContext.Provider value={{ user, setUser, userLoading, setUserLoading }}>
+				<Header />
 
-			<Switch>
-				<Route exact path='/'>
-					<Home />
-				</Route>
-				<Route path='/register'>
-					<Register />
-				</Route>
-				<Route path='/login'>
-					<Login />
-				</Route>
-				<Route exact path='/dashboard'>
-					<Dashboard user={user} setUser={setUser} userLoading={userLoading} />
-				</Route>
-				{/* <Route path='/test'>
+				<Switch>
+					<Route exact path='/'>
+						<Home />
+					</Route>
+					<Route path='/register'>
+						<Register />
+					</Route>
+					<Route path='/login'>
+						<Login />
+					</Route>
+					<Route exact path='/dashboard'>
+						<Dashboard  />
+					</Route>
+					{/* <Route path='/test'>
 					<Test user={user} />
 				</Route> */}
-			</Switch>
+				</Switch>
+			</UserContext.Provider>
 		</Router>
 	)
 }

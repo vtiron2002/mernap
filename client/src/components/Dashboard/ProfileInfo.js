@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 // import { Link } from 'react-router-dom';
 import placeholderProfileImage from '../../images/placeholderProfileImage.png'
+import { UserContext } from '../../UserContext'
 
-export default function ProfileInfo({ user, toggleEdit, changesSavedMessage }) {
+export default function ProfileInfo({ toggleEdit, changesSavedMessage }) {
+	const { user } = useContext(UserContext)
+
 	return (
 		<>
 			<div className='profileInfoContainer'>

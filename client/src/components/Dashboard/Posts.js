@@ -1,56 +1,47 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import placeholderImage from '../../images/placeholderProfileImage.png'
+import { customFetch } from '../../api/fetch'
+import { UserContext } from '../../UserContext'
 
-export default function Posts({ user, setUser }) {
+export default function Posts() {
+	const {user, setUser} = useContext(UserContext)
+
 	const [postContent, setPostContent] = useState('')
-	const [error, setError] = useState('')
-	const [loading, setLoading] = useState(false)
 
 	const onChange = ({ target }) => {
 		setPostContent(target.value)
 	}
 
-	const fetchPost = async (url, payload) => {
-		setLoading(true)
-		return await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				authorization: `Bearer ${localStorage.token}`,
-			},
-			body: JSON.stringify(payload),
-		}).then((res) => res.json())
-	}
-
 	const addNewPost = async (e) => {
 		e.preventDefault()
-		try {
-			if (!postContent.trim()) throw Error('Enter content')
-
-			const newPost = {
-				postContent,
-				profilePic: user.profilePic ? user.profilePic : placeholderImage,
-				name: user.name,
-				dateCreated: new Date().toLocaleString(),
-				likes: 0,
-				comments: 0,
-			}
-
-			const res = await fetchPost('/data/addPost', newPost)
-			setUser({ ...user, posts: [...user.posts, res] })
-			setLoading(false)
-
-			setPostContent('')
-		} catch (e) {
-			setError(e.message)
-			setTimeout(() => setError(''), 2000)
+		const newPost = {
+			postContent,
+			profilePic: user.profilePic ? user.profilePic : placeholderImage,
+			name: user.name,
+			dateCreated: new Date().toLocaleString(),
+			likes: 0,
+			comments: 0,
 		}
+
+		await customFetch({
+			url: '/data/addPost',
+			body: newPost,
+			method: 'POST',
+		}).then((res) => {
+			setUser({ ...user, posts: [...user.posts, res] })
+		})
+
+		setPostContent('')
 	}
 
 	const deletePost = async (date) => {
-		const res = await fetchPost('/data/deletePost', { date })
-		setUser({ ...user, posts: res })
-		setLoading(false)
+		await customFetch({
+			url: '/data/deletePost',
+			body: { date },
+			method: 'POST',
+		}).then((res) => {
+			setUser({ ...user, posts: res })
+		})
 	}
 
 	return (
@@ -67,15 +58,19 @@ export default function Posts({ user, setUser }) {
 						<form className='flex-fill'>
 							<div className='input-group h-100'>
 								<textarea
-									style={{ outlineColor: error && '#dc3545' }}
 									value={postContent}
 									onChange={onChange}
 									name='postContent'
-									placeholder={error ? error : 'Write a post/nappy...'}
-									className={`form-control border-0 bg-light ${error && 'is-invalid'}`}
+									placeholder={'Write a post...'}
+									className={`form-control border-0 bg-light`}
+									style={{ outline: 'none' }}
 								/>
 								<div className='input-group-append'>
-									<button disabled={loading} onClick={addNewPost} className='btn btn-primary'>
+									<button
+										disabled={!postContent.trim()}
+										onClick={addNewPost}
+										className='btn btn-primary'
+									>
 										Post
 									</button>
 								</div>
@@ -114,7 +109,7 @@ export default function Posts({ user, setUser }) {
 							</div>
 						))
 					) : (
-						<h5 className='text-muted p-4'>You have no nappies</h5>
+						<h5 className='text-muted p-4'>You have no posts</h5>
 					)}
 				</div>
 			</div>

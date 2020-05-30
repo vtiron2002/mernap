@@ -1,5 +1,5 @@
 import React from 'react'
-import {render} from 'react-dom'
+import { render } from 'react-dom'
 
 import App from './App'
 
@@ -8,7 +8,4 @@ import './styles/custom.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/responsive.css'
 
-render(
-  <App />,
-  document.querySelector('#root')
-)
+render(<App />, document.querySelector('#root'))

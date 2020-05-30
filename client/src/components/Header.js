@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { UserContext } from '../UserContext'
 
-export default function Header({ usersName, userLoading }) {
+export default function Header() {
+	const {user, userLoading} = useContext(UserContext)
+	
 	const logout = () => {
 		delete localStorage.token
 		window.location.href = '/login'
@@ -20,7 +23,7 @@ export default function Header({ usersName, userLoading }) {
 								<span className='sr-only'>Loading...</span>
 							</div>
 						) : (
-							<h6 className='m-0 mr-3'>{usersName}</h6>
+							<h6 className='m-0 mr-3'>{user.name}</h6>
 						)}
 
 						<button onClick={logout} className='btn btn-danger'>

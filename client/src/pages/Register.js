@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import { customFetch } from '../api/fetch'
 
 export default function Register() {
 	const [registerInfo, setRegisterInfo] = useState({
@@ -8,39 +9,44 @@ export default function Register() {
 		password: '',
 		confirmPassword: '',
 	})
-
 	const [error, setError] = useState('')
+	const [loading, setLoading] = useState(false)
 
-	const onChange = (e) => {
-		setRegisterInfo({ ...registerInfo, [e.target.id]: e.target.value })
+	useEffect(() => {
+		document.querySelector('title').innerText = `MERNAP - Register`
+
+	}, [])
+
+	const onChange = ({ target: { id, value } }) => {
+		setRegisterInfo({ ...registerInfo, [id]: value })
 	}
 
-	const onSubmit = (e) => {
+	const onSubmit = async (e) => {
 		e.preventDefault()
-		fetch('/auth/register', {
+		setLoading(true)
+		setError('')
+
+
+		await customFetch({
+			url: '/auth/register',
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(registerInfo),
+			auth: false,
+			body: registerInfo,
+		}).then((res) => {
+			if (res.message) {
+				setLoading(false)
+				setError(res.message)
+			} else {
+				localStorage.token = res.token
+				document.querySelector('#next').click()
+			}
 		})
-			.then((res) => res.json())
-			.then((res) => {
-				if (res.message) {
-					setError(res.message)
-					setTimeout(() => {
-						setError('')
-					}, 2000)
-				} else {
-					localStorage.token = res.token
-					window.location.href = '/dashboard'
-				}
-			})
 	}
 
 	if (!localStorage.token) {
 		return (
 			<div className='register container my-4 d-flex align-items-center justify-content-center'>
+				<Link id='next' hidden to='/dashboard'></Link>
 				<div className='card p-4 w-100 shadow'>
 					<h2 className='text-center m-0'>Register</h2>
 					<hr />
@@ -52,7 +58,6 @@ export default function Register() {
 								id='name'
 								type='text'
 								className='form-control'
-								required
 								onChange={onChange}
 								value={registerInfo.name}
 							/>
@@ -63,7 +68,6 @@ export default function Register() {
 								id='email'
 								type='email'
 								className='form-control'
-								required
 								onChange={onChange}
 								value={registerInfo.email}
 							/>
@@ -75,7 +79,6 @@ export default function Register() {
 									id='password'
 									type='password'
 									className='form-control'
-									required
 									onChange={onChange}
 									value={registerInfo.password}
 								/>
@@ -86,19 +89,27 @@ export default function Register() {
 									id='confirmPassword'
 									type='password'
 									className='form-control'
-									required
 									onChange={onChange}
 									value={registerInfo.confirmPassword}
 								/>
 							</div>
 						</div>
-						{error && <div className='alert alert-danger'>{error}</div>}
+						<div className='d-flex' style={{ maxHeight: '50px' }}>
+							{error && <div className='alert alert-danger flex-fill m-0'>{error}</div>}
+							{loading && (
+								<div className='alert d-flex justify-content-center align-items-center m-0 flex-fill'>
+									<div className='spinner-border text-primary' role='status'>
+										<span className='sr-only'>Loading...</span>
+									</div>
+								</div>
+							)}
+						</div>
 
 						<hr />
 						<button type='submit' className='btn btn-primary'>
 							Register
 						</button>
-						<br hidden/>
+						<br hidden />
 
 						<span className='mx-3'>
 							Already have an account? <Link to='/login'>Login here</Link>
@@ -108,6 +119,6 @@ export default function Register() {
 			</div>
 		)
 	} else {
-		return <Redirect to="/dashboard" />
+		return <Redirect to='/dashboard' />
 	}
 }

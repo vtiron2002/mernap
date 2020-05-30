@@ -1,81 +1,43 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
 import EditProfile from '../components/Dashboard/EditProfile'
 import ProfileInfo from '../components/Dashboard/ProfileInfo'
 import Notes from '../components/Dashboard/Notes'
 import Posts from '../components/Dashboard/Posts'
 
-export default function Dashboard({ user, setUser, userLoading }) {
-	const [newNote, setNewNote] = useState({
-		name: '',
-		note: '',
-	})
-	const [noteError, setNoteError] = useState('')
+import { customFetch } from '../api/fetch'
+
+import { UserContext } from '../UserContext'
+
+export default function Dashboard() {
+	const { setUser, setUserLoading, userLoading } = useContext(UserContext)
+
 	const [editProfile, setEditProfile] = useState(false)
 	const [changesSavedMessage, setChangesSavedMessage] = useState('')
 
 	useEffect(() => {
-		const token = localStorage.token
-		fetch('/auth/checkJWT', {
-			method: 'POST',
-			headers: {
-				'content-type': 'application/json',
-			},
-			body: JSON.stringify({ token }),
-		})
-			.then((res) => res.json())
-			.then((res) => {
-				if (res.err) {
-					delete localStorage.token
-				}
-			})
-	}, [])
+		document.querySelector('title').innerText = `MERNAP - Dashboard`
+		const { token } = localStorage
 
-	const onChange = ({ target: { id, value } }) => {
-		setNewNote({ ...newNote, [id]: value })
-	}
-
-	const addNewNote = (e) => {
-		e.preventDefault()
-		if (!newNote.name.trim('') || !newNote.note.trim('')) {
-			setNoteError('Fill both out')
-		} else {
-			const body = {
-				...newNote,
-				created_at: new Date(),
-			}
-			fetch('/data/addNote', {
-				method: 'POST',
-				headers: {
-					'content-type': 'application/json',
-					authorization: `Bearer ${localStorage.token}`,
-				},
-				body: JSON.stringify(body),
+		const setUserData = async () => {
+			setUserLoading(true)
+			await customFetch({ url: '/data/get' }).then((user) => {
+				setUser(user)
 			})
-				.then((res) => res.json())
-				.then((res) => {
-					setUser({ ...user, notes: [...user.notes, res] })
-				})
-			setNewNote({
-				name: '',
-				note: '',
-			})
-			setNoteError('')
+			setUserLoading(false)
 		}
-	}
+		setUserData()
 
-	const removeNote = (date) => {
-		fetch('/data/removeNote', {
-			method: 'DELETE',
-			headers: {
-				'content-type': 'application/json',
-				authorization: `Bearer ${localStorage.token}`,
-			},
-			body: JSON.stringify({ date }),
-		})
-			.then((res) => res.json())
-			.then((res) => setUser({ ...user, notes: res }))
-	}
+		const checkJWT = async () => {
+			await customFetch({
+				method: 'POST',
+				url: '/auth/checkJWT',
+				body: { token },
+				auth: false,
+			}).then((res) => res.err && delete localStorage.token)
+		}
+		checkJWT()
+	}, [setUser, setUserLoading])
 
 	const toggleEdit = () => {
 		setEditProfile(!editProfile)
@@ -100,31 +62,12 @@ export default function Dashboard({ user, setUser, userLoading }) {
 		} else {
 			return (
 				<div className='dashboardContainer'>
-					<ProfileInfo
-						user={user}
-						toggleEdit={toggleEdit}
-						changesSavedMessage={changesSavedMessage}
-					/>
-
+					<ProfileInfo toggleEdit={toggleEdit} changesSavedMessage={changesSavedMessage} />
 					{editProfile && (
-						<EditProfile
-							user={user}
-							setUser={setUser}
-							setChangesSavedMessage={setChangesSavedMessage}
-							toggleEdit={toggleEdit}
-						/>
+						<EditProfile toggleEdit={toggleEdit} setChangesSavedMessage={setChangesSavedMessage} />
 					)}
-
-					<Posts user={user} setUser={setUser} />
-
-					<Notes
-						user={user}
-						removeNote={removeNote}
-						addNewNote={addNewNote}
-						noteError={noteError}
-						onChange={onChange}
-						newNote={newNote}
-					/>
+					<Posts />
+					<Notes />
 				</div>
 			)
 		}

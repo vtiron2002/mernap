@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import DeleteAccount from './DeleteAccount'
+import { UserContext } from '../../UserContext'
 // import placeholderProfileImage from '../images/placeholderProfileImage.png';
 
-export default function EditProfile({ user, setUser, setChangesSavedMessage, toggleEdit }) {
+export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
+	const { user, setUser } = useContext(UserContext)
+	
 	const [modal, setModal] = useState(false)
+
 
 	const onChange = (e) => {
 		setUser({ ...user, [e.target.id]: e.target.value })
