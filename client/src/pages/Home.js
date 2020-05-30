@@ -4,7 +4,7 @@ import { Redirect, Link } from 'react-router-dom'
 export default function Home() {
 	if (!localStorage.token) {
 		return (
-			<div class='jumbotron text-center'>
+			<div class='home jumbotron text-center'>
 				<h1 class='display-4'>Welcome to "MERNAP"</h1>
 				<p class='lead'>
 					This is a simple app made from the MERN stack.

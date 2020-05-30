@@ -5,8 +5,8 @@ import { customFetch } from '../api/fetch'
 
 export default function Login() {
 	const [loginInfo, setLoginInfo] = useState({
-		email: 'vtiron2002@gmail.com',
-		password: 'Android17',
+		email: '',
+		password: '',
 	})
 	const [error, setError] = useState('')
 	const [loading, setLoading] = useState(false)
