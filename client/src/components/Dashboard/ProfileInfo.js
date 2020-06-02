@@ -9,13 +9,12 @@ export default function ProfileInfo({ toggleEdit, changesSavedMessage }) {
 	return (
 		<>
 			<div className='profileInfoContainer'>
-				<div className='card h-100 overflow-hidden'>
+				<div className='card'>
 					<img
-						style={{ objectFit: 'cover', maxHeight: '250px', minHeight: '200px' }}
 						src={user.profilePic ? user.profilePic : placeholderProfileImage}
 						alt='profile-pic'
 					/>
-					<div className='card-body'>
+					<div>
 						<h5 className='card-title'>{user.name}</h5>
 						<div
 							style={{
@@ -33,18 +32,18 @@ export default function ProfileInfo({ toggleEdit, changesSavedMessage }) {
 
 				{/* ///////////////////////////////////////////////////////////////////////////////////////////////// */}
 
-				<div className='card h-100'>
-					<div className='card-header d-flex justify-content-between align-items-center'>
-						<span>User Info</span>
-
+				<div className='card'>
+					<div className='card-header'>
+						<h3>User Info</h3>
 						{changesSavedMessage && <span className='text-success'>{changesSavedMessage}</span>}
 					</div>
+					<hr />
 
-					<div className='card-body overflow-auto'>
+					<div className='card-body'>
 						<h5 className='card-title'>{user.name}</h5>
 						<p>{user.bio}</p>
 					</div>
-					<div className='card-footer d-flex align-items-center justify-content-between'>
+					<div className='card-footer'>
 						<button onClick={toggleEdit} className='btn btn-secondary btn-sm'>
 							Edit profile
 						</button>

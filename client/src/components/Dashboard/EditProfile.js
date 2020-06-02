@@ -1,13 +1,21 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import DeleteAccount from './DeleteAccount'
 import { UserContext } from '../../UserContext'
 // import placeholderProfileImage from '../images/placeholderProfileImage.png';
 
 export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 	const { user, setUser } = useContext(UserContext)
-	
+
 	const [modal, setModal] = useState(false)
 
+	useEffect(() => {
+		if (modal) {
+			document.querySelector('body').style.overflow = 'hidden'
+		} else {
+			document.querySelector('body').style.removeProperty('overflow')
+
+		}
+	}, [modal])
 
 	const onChange = (e) => {
 		setUser({ ...user, [e.target.id]: e.target.value })
@@ -42,8 +50,11 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 		<>
 			<div className='editProfileContainer'>
 				<DeleteAccount modal={modal} setModal={setModal} user={user} />
-				<div className='card h-100'>
-					<div className='card-header'>Edit Profile</div>
+				<div className='card'>
+					<div className='card-header'>
+						<h3>Edit Profile</h3>
+					</div>
+					<hr />
 					<div className='card-body'>
 						<form onSubmit={onSubmitChanges}>
 							<div className='form-group'>
@@ -67,44 +78,33 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 									onChange={onChange}
 								/>
 							</div>
-							<div className='input-group mb-3'>
-								<div className='input-group-prepend'>
-									<span className='input-group-text' id='inputGroupFileAddon01'>
-										Profile Picture
-									</span>
-								</div>
-								<div className='custom-file'>
-									<input
-										type='file'
-										className='custom-file-input'
-										id='profilePic'
-										onChange={(e) => {
-											const file = e.target.files[0]
-											if (file) {
-												const reader = new FileReader()
-												reader.addEventListener('load', (e) => {
-													setUser({ ...user, profilePic: e.target.result })
-												})
-												reader.readAsDataURL(file)
-											} else {
-												setUser({ ...user, profilePic: '' })
-											}
-										}}
-									/>
-									<label className='custom-file-label' htmlFor='inputGroupFile01'>
-										Choose file
-									</label>
-								</div>
+							<div className='form-group'>
+								<input
+									type='file'
+									id='profilePic'
+									onChange={(e) => {
+										const file = e.target.files[0]
+										if (file) {
+											const reader = new FileReader()
+											reader.addEventListener('load', (e) => {
+												setUser({ ...user, profilePic: e.target.result })
+											})
+											reader.readAsDataURL(file)
+										} else {
+											setUser({ ...user, profilePic: '' })
+										}
+									}}
+								/>
 							</div>
 						</form>
-						<div className='d-flex justify-content-between align-items-center'>
-							<button onClick={onSubmitChanges} className='btn btn-success'>
-								Save changes
-							</button>
-							<button onClick={openModal} className='btn btn-danger'>
-								Delete Account
-							</button>
-						</div>
+					</div>
+					<div className='card-footer'>
+						<button onClick={onSubmitChanges} className='btn btn-success'>
+							Save changes
+						</button>
+						<button onClick={openModal} className='btn btn-danger'>
+							Delete Account
+						</button>
 					</div>
 				</div>
 			</div>

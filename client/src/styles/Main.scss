@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import './variables.scss';
+
+@import '../components/styles/Header.scss';
+@import '../pages/styles/Home.scss';
+@import '../pages/styles/Dashboard.scss';
+
+@import '../styles/responsive.scss';
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Montserrat', sans-serif;
+	color: $darkText;
+}
+
+body {
+	background: #ccc;
+	height: 100vh;
+}
+
+a {
+	text-decoration: none;
+}
+
+button {
+	@include button;
+
+	cursor: pointer;
+	transition: 0.2s ease;
+
+	&:hover {
+		filter: brightness(0.8);
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+}
+
+.container {
+	width: 80%;
+	margin: 0 auto;
+	height: 100%;
+	padding: 1.5rem 0;
+}
+
+span.loading {
+	color: $whiteText;
+}
+
+.card {
+	padding: 1.5rem 2rem;
+	background: $whiteText;
+	border-radius: $mainRadius;
+	box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
+	border-top: $mainBorder;
+}
+
+.form-control {
+	width: 100%;
+	border-radius: $mainRadius;
+	border: 1px solid #ccc;
+	padding: 0.5rem 0.5rem;
+	font-size: 1.1rem;
+	margin: 0.5rem 0;
+}
+
+.form-group {
+	@include flex(stretch, stretch, column);
+
+	margin-bottom: 1rem;
+}
+
+hr {
+	color: #ccc;
+	margin: 0.4rem 0;
+}
+
+.text-muted {
+	color: rgba(0, 0, 0, 0.403);
+}
+
+.text-success {
+	color: $mainColor;
+}
+
+.text-danger {
+	color: red;
+}
+
+kbd {
+	background: $darkText;
+	color: $whiteText;
+	padding: 0.2rem 0.5rem;
+	border-radius: 0.5rem;
+}
+
+textarea {
+	min-width: 100%;
+	max-width: 100%;
+	resize: none;
+
+}
+
+.badge {
+	background: $mainColor;
+	padding: .2rem .8rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	color: $whiteText;
+}

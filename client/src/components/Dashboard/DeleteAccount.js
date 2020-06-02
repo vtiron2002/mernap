@@ -13,7 +13,8 @@ export default function DeleteAccount({ modal, setModal, user }) {
 	const [modalMsg, setModalMsg] = useState('')
 	const [email, setEmail] = useState('')
 
-	const deleteAccount = async () => {
+	const deleteAccount = async (e) => {
+		e.preventDefault()
 		try {
 			if (user.email !== email) throw Error(`Doesn't match email`)
 
@@ -27,6 +28,8 @@ export default function DeleteAccount({ modal, setModal, user }) {
 					delete localStorage.token
 					document.querySelector('#next').click()
 					setUser({})
+				} else {
+					setModalMsg(res.message)
 				}
 			})
 		} catch (e) {
@@ -36,13 +39,13 @@ export default function DeleteAccount({ modal, setModal, user }) {
 
 	return (
 		<div
-			className='modal customModal'
+			className='modal'
 			style={{
 				display: modal ? 'flex' : 'none',
 				opacity: modal ? '100%' : '0',
 			}}
 		>
-			<div className='modal-dialog customModalDialog'>
+			<div className='modal-dialog card'>
 				<Link id='next' hidden to='/'></Link>
 				<div className='modal-content'>
 					<div className='modal-header'>
@@ -50,14 +53,14 @@ export default function DeleteAccount({ modal, setModal, user }) {
 							Are you sure you want to delete your account?
 						</h5>
 						<button onClick={closeModal} type='button' className='close'>
-							<span>&times;</span>
+							<span>×</span>
 						</button>
 					</div>
 					<div className='modal-body'>
-						<form>
+						<form onSubmit={deleteAccount}>
 							<div className='form-group'>
 								<label>
-									Enter: <kbd>{user.email}</kbd> to delete account.
+									Enter <kbd>{user.email}</kbd> to delete your account.
 								</label>
 								<input
 									type='text'

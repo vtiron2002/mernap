@@ -1,0 +1,39 @@
+$mainColor: #009999;
+$mainRadius: 0.2rem;
+$mainBorder: 4px solid $mainColor;
+
+$whiteText: rgb(245, 245, 245);
+$darkText: rgb(28, 28, 28);
+
+$buttonPadding: 0.5rem 1rem;
+$gridGap: 1.5rem;
+
+$cardPadding: 1.5rem 2rem;
+
+@mixin headerText {
+	font-size: 1.2rem;
+	font-weight: 500;
+}
+
+@mixin flex($justifyContent: center, $alignItems: center, $direction: row) {
+	display: flex;
+	justify-content: #{$justifyContent};
+	align-items: #{$alignItems};
+	flex-direction: #{$direction};
+}
+
+@mixin grid($cols, $rows, $gap) {
+	display: grid;
+	grid-template-columns: #{$cols};
+	grid-template-rows: #{$rows};
+	gap: #{$gap};
+}
+
+@mixin button() {
+	background: $mainColor;
+	color: $whiteText;
+	font-size: 1rem;
+	padding: $buttonPadding;
+	border-radius: $mainRadius;
+	border: none;
+}

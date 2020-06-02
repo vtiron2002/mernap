@@ -26,7 +26,7 @@ route.post('/register', async (req, res) => {
 		if (!name.trim()) throw Error('Name is missing.')
 		if (!validator.isEmail(email)) throw Error(`Email isn't valid.`)
 		if (password !== confirmPassword) throw Error(`Passwords don't match.`)
-		if (password.length < 8) throw Error('Password must be at leasr 8 characters.')
+		if (password.length < 8) throw Error('Password must be at least 8 characters.')
 
 		const user = await Users.findOne({ email })
 		if (user) throw Error('An account with that email already exists. Log in instead.')
@@ -40,10 +40,8 @@ route.post('/register', async (req, res) => {
 		Users.create(newUser, (err, user) => {
 			createTokenSendRes(user, res)
 		})
-
 	} catch (e) {
 		res.json({ message: e.message })
-		console.log(e)
 	}
 
 	// if (password === confirmPassword) {
@@ -89,7 +87,7 @@ route.post('/login', async (req, res) => {
 })
 
 route.post('/checkJWT', (req, res) => {
-	const token = req.body.token
+	const { token } = req.body
 	if (token) {
 		jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
 			if (err) {

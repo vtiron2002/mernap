@@ -1,0 +1,41 @@
+@import '../../styles/variables.scss';
+
+
+header {
+	background: $mainColor;
+	width: 100%;
+	height: 4rem;
+
+	.container {
+		@include flex(space-between, center);
+
+		a {
+			color: $whiteText;
+			font-size: 2rem;
+			font-weight: 500;
+    }
+    
+    .rightSide {
+      @include grid(repeat(2, 1fr), auto, 1rem);
+
+      .loader > div {
+        background: white;
+      }
+
+      span {
+        @include headerText;
+        color: $whiteText;
+        align-self: center;
+      }
+
+      button {
+        font-size: 1rem;
+        padding: $buttonPadding;
+        border-radius: $mainRadius;
+        border: none;
+        background: rgb(216, 36, 36);
+        color: $whiteText;
+      }
+    }
+	}
+}

@@ -39,17 +39,17 @@ export default function Notes() {
 
 	return (
 		<>
-			<div className='noteContainer'>
-				<div className='card h-100'>
-					<div className='card-header d-flex justify-content-between align-items-center'>
+			<div className='notesContainer'>
+				<div className='card'>
+					<div className='notesHeader'>
 						<div>New note</div>
 					</div>
 
 					<div className='card-body'>
-						<form className='d-flex flex-column h-100' onSubmit={addNewNote}>
+						<form className='' onSubmit={addNewNote}>
 							<input
 								type='text'
-								className='form-control mb-2'
+								className='form-control'
 								placeholder='Note name'
 								value={newNote.name}
 								id='name'
@@ -57,7 +57,7 @@ export default function Notes() {
 							/>
 							<textarea
 								type='text'
-								className='form-control mb-2 flex-fill'
+								className='form-control'
 								placeholder='Note'
 								value={newNote.note}
 								id='note'
@@ -73,39 +73,31 @@ export default function Notes() {
 					</div>
 				</div>
 
-				<div className='card h-100'>
-					<div className='card-header d-flex justify-content-between align-items-center'>
+				<div className='card'>
+					<div>
 						<h5>Your notes</h5>
-						<h4 className='m-0'>
-							{user.notes && <span className='badge badge-primary'>{user.notes.length}</span>}
-						</h4>
+						{user.notes && <span className='badge badge-primary'>{user.notes.length}</span>}
 					</div>
-					<div className='card-body overflow-auto'>
+					<div className='notesBody'>
 						{user.notes && user.notes.length === 0 && (
-							<span className='text-muted'>You have no notes.. make some!</span>
+							<h4 className='text-muted'>You have no notes.. make some!</h4>
 						)}
 
 						{user.notes &&
-							[...user.notes].reverse().map((n) => (
-								<div key={n.created_at} className='card bg-light p-2 mb-2'>
-									<div className='d-flex justify-content-between align-items-center'>
-										<h6 className='m-0'>{n.name}</h6>
-										<button
-											onClick={() => removeNote(n.created_at)}
-											className='btn btn-danger btn-sm'
-										>
-											&times;
-										</button>
+							[...user.notes].reverse().map((n, i) => (
+								<React.Fragment key={i}>
+									<div className='note'>
+										<div className='noteHeader'>
+											<span>{n.name}</span>
+											<button onClick={() => removeNote(n.created_at)}>×</button>
+										</div>
+
+										<p>{n.note}</p>
+
+										<span className='text-muted'>{new Date(n.created_at).toLocaleString()}</span>
 									</div>
-
-									<hr className='my-2' />
-									<p>{n.note}</p>
-									<hr className='my-2' />
-
-									<span className='text-muted'>
-										created: {new Date(n.created_at).toLocaleString()}
-									</span>
-								</div>
+									<hr />
+								</React.Fragment>
 							))}
 					</div>
 				</div>

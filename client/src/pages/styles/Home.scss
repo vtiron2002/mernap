@@ -1,0 +1,29 @@
+@import '../../styles/variables.scss';
+
+.homeContainer {
+	@include grid(repeat(2, 1fr), 1fr, $gridGap);
+
+	button {
+		@include button;
+	}
+
+	h2 {
+		@include headerText;
+		font-size: 1.7rem;
+	}
+
+	.message {
+		@include flex(center, center);
+
+		.error {
+			@include flex(center, center);
+			width: 100%;
+			height: 2.5rem;
+			font-size: 1.5rem;
+			border: 2px solid rgba(255, 0, 0, 0.5);
+			color: red;
+			border-radius: $mainRadius;
+			font-size: 1.2rem;
+		}
+	}
+}

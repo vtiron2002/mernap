@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import React, { useState } from 'react'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import Header from './components/Header'
 
-import Register from './pages/Register'
-import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'
-import Home from './pages/Home'
+import { Dashboard, Home, NotFound } from './pages'
 
 import { UserContext } from './UserContext'
 
@@ -13,31 +10,16 @@ export default function App() {
 	const [user, setUser] = useState({})
 	const [userLoading, setUserLoading] = useState(false)
 
-	useEffect(() => {
-		console.log('APP LOADED')
-	}, [])
+	const loggedIn = !!localStorage.token
 
 	return (
 		<Router>
 			<UserContext.Provider value={{ user, setUser, userLoading, setUserLoading }}>
 				<Header />
-
 				<Switch>
-					<Route exact path='/'>
-						<Home />
-					</Route>
-					<Route path='/register'>
-						<Register />
-					</Route>
-					<Route path='/login'>
-						<Login />
-					</Route>
-					<Route exact path='/dashboard'>
-						<Dashboard  />
-					</Route>
-					{/* <Route path='/test'>
-					<Test user={user} />
-				</Route> */}
+					<Route exact path="/" render={() => loggedIn ? <Dashboard /> : <Home />} />
+					<Route path="/dashboard" render={() => loggedIn ? <Dashboard /> : <Redirect to="/" />} />
+					<Route path='*' component={NotFound} />
 				</Switch>
 			</UserContext.Provider>
 		</Router>

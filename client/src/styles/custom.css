@@ -14,7 +14,7 @@ body {
 	flex: 1;
 }
 
-.login, .register, .dashboardContainer, .home {
+.login, .register, .dashboardContainer, .home, .notFound {
 	position: relative;
 	top: 50px
 }
