@@ -15,7 +15,7 @@ export default function Header() {
 	return (
 		<header>
 			<div className='container'>
-				<Link to='/'>MERNAP</Link>
+				<Link to='/'>oQurt</Link>
 				{localStorage.token && (
 					<div className='rightSide'>
 						{userLoading ? <Loader /> : <span>{user.name}</span>}
