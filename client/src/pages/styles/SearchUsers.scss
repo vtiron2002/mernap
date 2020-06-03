@@ -1,0 +1,66 @@
+@import '../../styles/variables.scss';
+
+.searchUsersContainer {
+	@include grid(100%, auto auto, 3rem);
+
+	.card {
+		max-width: 100%;
+
+		.card-title {
+			@include headerText;
+		}
+	}
+
+	.users {
+		@include grid(100%, minmax(100px, 100px), 1rem);
+		cursor: pointer;
+
+		.card {
+			@include flex(stretch, stretch);
+			border: none;
+			padding: 0.5rem 1rem;
+      transition: 0.2s ease;
+      min-height: 100px;
+      max-height: 100px;
+
+			&:hover {
+				background: darken($whiteText, 5%);
+			}
+
+			&:active {
+				background: darken($whiteText, 15%);
+			}
+
+			img {
+				max-height: 100%;
+        max-width: 100px;
+        min-width: 84px;
+        min-height: 100%;
+				object-fit: cover;
+			}
+
+			.info {
+				@include flex(center, stretch, column);
+				margin-left: 1rem;
+        flex: 1;
+        max-width: 100%;
+
+				> span {
+					@include headerText;
+				}
+
+				div {
+					text-overflow: ellipsis;
+					overflow: hidden;
+					max-height: 100%;
+					max-width: 50%;
+					white-space: nowrap;
+
+					span {
+						white-space: nowrap;
+					}
+				}
+			}
+		}
+	}
+}

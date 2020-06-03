@@ -1,0 +1,51 @@
+@import '../../styles/variables.scss';
+
+.userContainer {
+	@include grid(200px auto, auto, $gridGap);
+
+	.card:nth-child(1) {
+		padding: 0;
+
+		img {
+			width: 100%;
+			min-height: 200px;
+			max-height: 250px;
+			object-fit: cover;
+		}
+
+		> div {
+			padding: 1.5rem 0.8rem;
+    }
+    
+    .card-title {
+      @include headerText
+    }
+	}
+
+	.card:nth-child(2) {
+		@include flex(stretch, stretch, column);
+
+		.card-header {
+			@include flex(space-between, center);
+
+			h3 {
+				@include headerText;
+			}
+		}
+
+		.card-body {
+			flex: 1;
+			overflow: auto;
+
+			h5.card-title {
+				font-size: 1.3rem;
+				font-weight: 500;
+				margin-bottom: 0.2rem;
+			}
+		}
+
+		.card-footer {
+			@include flex(space-between, center);
+		}
+	}
+}
