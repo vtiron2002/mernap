@@ -16,7 +16,7 @@ $cardPadding: 1.5rem 2rem;
 }
 
 @mixin flex($justifyContent: center, $alignItems: center, $direction: row) {
-	display: flex;
+	display: flex !important;
 	justify-content: #{$justifyContent};
 	align-items: #{$alignItems};
 	flex-direction: #{$direction};

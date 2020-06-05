@@ -19,7 +19,7 @@
 		grid-template-columns: 1fr;
 	}
 
-	.profileInfoContainer {
+	.profileInfoContainer, .userContainer {
 		grid-template-columns: 100% !important;
 		grid-template-rows: auto 300px !important;
 

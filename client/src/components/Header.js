@@ -15,7 +15,7 @@ export default function Header() {
 	return (
 		<header>
 			<div className='container'>
-				<Link to='/'>MERNAP</Link>
+				{/* <Link to='/'>MERNAP</Link>
 				{localStorage.token && (
 					<div className='rightSide'>
 						{userLoading ? <Loader /> : <span>{user.name}</span>}
@@ -24,6 +24,32 @@ export default function Header() {
 							Log out
 						</button>
 					</div>
+				)} */}
+
+				<Link className='logo' to='/'>
+					MERNAP
+				</Link>
+
+				{localStorage.token && (
+					<>
+						<input type='checkbox' id='check' />
+						<label for='check' class='checkbtn'>
+							<div className='burger-menu'>
+								<div></div>
+								<div></div>
+								<div></div>
+							</div>
+						</label>
+
+						<ul>
+							<li>
+								<a href='/searchUsers'>Search Users</a>
+							</li>
+							<li class='logout' onClick={logout}>
+								Log out
+							</li>
+						</ul>
+					</>
 				)}
 			</div>
 		</header>
