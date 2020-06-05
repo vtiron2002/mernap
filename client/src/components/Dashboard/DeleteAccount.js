@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react'
 import { customFetch } from '../../api/fetch'
-import { Link } from 'react-router-dom'
 import { UserContext } from '../../UserContext'
 
 export default function DeleteAccount({ modal, setModal, user }) {
@@ -26,7 +25,7 @@ export default function DeleteAccount({ modal, setModal, user }) {
 			}).then((res) => {
 				if (res.status === 'ok') {
 					delete localStorage.token
-					document.querySelector('#next').click()
+					window.location.href = '/'
 					setUser({})
 				} else {
 					setModalMsg(res.message)
@@ -46,7 +45,6 @@ export default function DeleteAccount({ modal, setModal, user }) {
 			}}
 		>
 			<div className='modal-dialog card'>
-				<Link id='next' hidden to='/'></Link>
 				<div className='modal-content'>
 					<div className='modal-header'>
 						<h5 className='modal-title' id='exampleModalLabel'>

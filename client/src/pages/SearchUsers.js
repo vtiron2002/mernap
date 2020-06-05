@@ -15,6 +15,8 @@ export default function SearchUsers() {
 		if (users.length !== 0) {
 			setMessage(`${users.length} ${users.length === 1 ? 'user' : 'users'} found!`)
 		}
+
+		document.querySelector('title').innerText = `MERNAP - Search Users`
 	}, [users])
 
 	const submitSearch = (e) => {

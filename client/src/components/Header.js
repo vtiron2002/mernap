@@ -2,30 +2,30 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../UserContext'
 
-import Loader from '../components/Loader'
 
 export default function Header() {
 	const { user, userLoading } = useContext(UserContext)
 
 	const logout = () => {
 		delete localStorage.token
+		delete localStorage.email
 		window.location.href = '/'
+	}
+
+	let open = false
+	const toggleMenu = () => {
+		if (!open) {
+			document.querySelector('body').style.overflow = 'hidden'
+			open = true
+		} else {
+			document.querySelector('body').style.removeProperty('overflow')
+			open = false
+		}
 	}
 
 	return (
 		<header>
 			<div className='container'>
-				{/* <Link to='/'>MERNAP</Link>
-				{localStorage.token && (
-					<div className='rightSide'>
-						{userLoading ? <Loader /> : <span>{user.name}</span>}
-
-						<button onClick={logout} className='logout'>
-							Log out
-						</button>
-					</div>
-				)} */}
-
 				<Link className='logo' to='/'>
 					MERNAP
 				</Link>
@@ -33,7 +33,7 @@ export default function Header() {
 				{localStorage.token && (
 					<>
 						<input type='checkbox' id='check' />
-						<label for='check' class='checkbtn'>
+						<label onClick={toggleMenu} htmlFor='check' className='checkbtn'>
 							<div className='burger-menu'>
 								<div></div>
 								<div></div>
@@ -45,7 +45,7 @@ export default function Header() {
 							<li>
 								<a href='/searchUsers'>Search Users</a>
 							</li>
-							<li class='logout' onClick={logout}>
+							<li className='logout' onClick={logout}>
 								Log out
 							</li>
 						</ul>

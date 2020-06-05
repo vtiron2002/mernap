@@ -8,6 +8,7 @@ import { customFetch } from '../api/fetch'
 import { UserContext } from '../UserContext'
 
 import Loader from '../components/Loader'
+import Loading from '../components/Loading'
 
 export default function Dashboard() {
 	const { setUser, setUserLoading, userLoading } = useContext(UserContext)
@@ -26,6 +27,7 @@ export default function Dashboard() {
 					return
 				} else {
 					setUser(user)
+					localStorage.email = user.email
 				}
 			})
 			setUserLoading(false)
@@ -38,7 +40,12 @@ export default function Dashboard() {
 				url: '/auth/checkJWT',
 				body: { token },
 				auth: false,
-			}).then((res) => res.err && delete localStorage.token)
+			}).then((res) => {
+				if (res.err) {
+					delete localStorage.token
+					delete localStorage.email
+				}
+			})
 		}
 		checkJWT()
 	}, [])
@@ -48,27 +55,18 @@ export default function Dashboard() {
 	}
 
 	// if (localStorage.token) {
-	if (userLoading) {
-		return (
-			<div className='container loadingPage'>
-				<Loader />
-				<a href='/dashboard' className='btn btn-success mt-4 text-white'>
-					Refresh Page
-				</a>
-			</div>
-		)
-	} else {
-		return (
-			<div className='dashboardContainer container'>
-				<ProfileInfo toggleEdit={toggleEdit} changesSavedMessage={changesSavedMessage} />
-				{editProfile && (
-					<EditProfile toggleEdit={toggleEdit} setChangesSavedMessage={setChangesSavedMessage} />
-				)}
-				<Posts />
-				<Notes />
-			</div>
-		)
-	}
+	if (userLoading) return <Loading />
+
+	return (
+		<div className='dashboardContainer container'>
+			<ProfileInfo toggleEdit={toggleEdit} changesSavedMessage={changesSavedMessage} />
+			{editProfile && (
+				<EditProfile toggleEdit={toggleEdit} setChangesSavedMessage={setChangesSavedMessage} />
+			)}
+			<Posts />
+			<Notes />
+		</div>
+	)
 	// } else {
 	// return <Redirect to='/' />
 	// }

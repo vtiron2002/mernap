@@ -111,7 +111,7 @@ route.post('/addPost', (req, res) => {
 
 route.post('/deletePost', (req, res) => {
 	const email = req.user.email
-	const date = req.body.date
+	const { date } = req.body
 	Users.findOne({ email }, (err, user) => {
 		const oldPosts = user.posts
 		const newPosts = oldPosts.filter((post) => post.dateCreated !== date)
@@ -175,6 +175,52 @@ route.post('/getUser', (req, res) => {
 
 		res.json({ user: filteredUser })
 	})
+})
+
+route.post('/likePost', (req, res) => {
+	const { email } = req.user
+	const { date, id, posts } = req.body
+
+	const newPosts = posts.map((p) =>
+		p.dateCreated === date ? { ...p, likes: [...p.likes, email] } : { ...p },
+	)
+
+	Users.updateOne(
+		{ _id: id },
+		{
+			$set: {
+				posts: [...newPosts],
+			},
+		},
+		(err, result) => {
+			res.json({ email })
+		},
+	)
+})
+
+route.post('/unlikePost', (req, res) => {
+	const { email } = req.user
+	const { date, id, posts } = req.body
+
+	const currentPost = posts.find((p) => p.dateCreated === date)
+
+	const filteredLikes = currentPost.likes.filter((l) => l !== email)
+
+	const newPosts = posts.map((p) =>
+		p.dateCreated === date ? { ...p, likes: filteredLikes } : { ...p },
+	)
+
+	Users.updateOne(
+		{ _id: id },
+		{
+			$set: {
+				posts: [...newPosts],
+			},
+		},
+		(err, result) => {
+			res.json({ newPosts })
+		},
+	)
 })
 
 module.exports = route

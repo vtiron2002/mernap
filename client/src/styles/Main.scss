@@ -58,7 +58,7 @@ span.loading {
 	padding: 1.5rem 2rem;
 	background: $whiteText;
 	border-radius: $mainRadius;
-	box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: $mainShadow;
 	border-top: $mainBorder;
 }
 
@@ -114,4 +114,16 @@ textarea {
 	font-size: 1rem;
 	border-radius: 8px;
 	color: $whiteText;
+}
+
+.loadingPage {
+	@include flex(center, center, column);
+
+	a {
+		margin-top: 20px;
+		padding: $buttonPadding;
+		background: $mainColor;
+		color: $whiteText;
+		border-radius: $mainRadius;
+	}
 }

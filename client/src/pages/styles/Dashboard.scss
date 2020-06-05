@@ -1,17 +1,5 @@
 @import '../../styles/variables.scss';
 
-.loadingPage {
-	@include flex(center, center, column);
-
-	a {
-		margin-top: 20px;
-		padding: $buttonPadding;
-		background: $mainColor;
-		color: $whiteText;
-		border-radius: $mainRadius;
-	}
-}
-
 .dashboardContainer {
 	@include grid(minmax(100px, 1fr), minmax(1fr, 350px), $gridGap);
 
@@ -222,12 +210,26 @@
 
 					.postBody {
 						p {
-							padding-top: 1rem;
+							padding: 0.5rem 0;
 							min-height: 4rem;
 						}
 
-						small:nth-child(3) {
+						.comments {
 							margin-left: 1rem;
+						}
+
+						.likes {
+							cursor: pointer;
+							transition: 0.1s ease;
+
+							&:hover,
+							&:active {
+								color: $mainColor;
+							}
+						}
+
+						.liked {
+							color: $mainColor;
 						}
 					}
 				}

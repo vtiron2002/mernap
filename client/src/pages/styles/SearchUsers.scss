@@ -13,7 +13,6 @@
 
 	.users {
 		@include grid(100%, minmax(100px, 100px), 1rem);
-		cursor: pointer;
 
 		.card {
 			@include flex(stretch, stretch);

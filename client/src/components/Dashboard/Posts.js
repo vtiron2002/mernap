@@ -18,8 +18,8 @@ export default function Posts() {
 			postContent,
 			name: user.name,
 			dateCreated: new Date().toLocaleString(),
-			likes: 0,
-			comments: 0,
+			likes: [],
+			comments: [],
 		}
 
 		await customFetch({
@@ -41,6 +41,34 @@ export default function Posts() {
 		}).then((res) => {
 			setUser({ ...user, posts: res })
 		})
+	}
+
+	const isLiked = (date) => {
+		const post = user.posts.find((p) => p.dateCreated === date)
+		return post.likes.includes(localStorage.email)
+	}
+
+	const toggleLike = (data) => {
+		const post = user.posts.find((p) => p.dateCreated === data.date)
+		const isLiked = post.likes.includes(localStorage.email)
+		if (!isLiked) {
+			customFetch({
+				url: '/data/likePost',
+				method: 'POST',
+				body: { ...data, posts: user.posts },
+			}).then(({ email }) => {
+				const posts = user.posts.map(
+					(p) => p.dateCreated === data.date ? { ...p, likes: [...p.likes, email] } : {...p},
+				)
+				setUser({ ...user, posts })
+			})
+		} else {
+			customFetch({
+				url: '/data/unlikePost',
+				method: 'POST',
+				body: { ...data, posts: user.posts },
+			}).then((res) => setUser({ ...user, posts: res.newPosts }))
+		}
 	}
 
 	return (
@@ -82,8 +110,13 @@ export default function Posts() {
 								<div className='postBody'>
 									<p>{p.postContent}</p>
 
-									<small className='text-muted'>{p.likes} likes</small>
-									<small className='text-muted'>{p.comments} comments</small>
+									<small
+										onClick={() => toggleLike({ id: user._id, date: p.dateCreated })}
+										className={`text-muted likes ${isLiked(p.dateCreated) && 'liked'}`}
+									>
+										{p.likes.length} {p.likes.length > 1 || p.likes.length === 0 ? 'likes' : 'like'}
+									</small>
+									<small className='text-muted comments'>{p.comments.length} comments</small>
 								</div>
 							</div>
 						))

@@ -19,9 +19,9 @@
 		grid-template-columns: 1fr;
 	}
 
-	.profileInfoContainer, .userContainer {
+	.profileInfoContainer, .userInfo {
 		grid-template-columns: 100% !important;
-		grid-template-rows: auto 300px !important;
+		grid-template-rows: auto 200px !important;
 
 		.card:nth-child(1) img {
 			object-fit: contain !important;
