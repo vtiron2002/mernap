@@ -16,7 +16,6 @@ export default function Posts() {
 		e.preventDefault()
 		const newPost = {
 			postContent,
-			profilePic: user.profilePic ? user.profilePic : placeholderImage,
 			name: user.name,
 			dateCreated: new Date().toLocaleString(),
 			likes: 0,
@@ -69,7 +68,7 @@ export default function Posts() {
 						[...user.posts].reverse().map((p, i) => (
 							<div key={i} className='post'>
 								<div className='postHeader'>
-									<img src={p.profilePic} alt='' />
+									<img src={user.profilePic} alt='' />
 									<div>
 										<span>{p.name}</span>
 										<br />
