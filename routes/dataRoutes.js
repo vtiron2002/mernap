@@ -193,7 +193,7 @@ route.post('/likePost', (req, res) => {
 			},
 		},
 		(err, result) => {
-			res.json({ email })
+			res.json({ email, newPosts })
 		},
 	)
 })
@@ -215,6 +215,45 @@ route.post('/unlikePost', (req, res) => {
 		{
 			$set: {
 				posts: [...newPosts],
+			},
+		},
+		(err, result) => {
+			res.json({ newPosts })
+		},
+	)
+})
+
+route.post('/addComment', async (req, res) => {
+	const { email, name } = req.user
+
+	const { _id, date } = req.body
+
+	const sender = await Users.find({ email })
+	const id = sender[0]._id
+	const profilePic = sender[0].profilePic
+
+	const reciever = await Users.find({ _id })
+	const prevPosts = reciever[0].posts
+
+	const newComment = {
+		_id: id,
+		name,
+		email,
+		profilePic,
+		content: req.body.newComment,
+		dateCreated: new Date(),
+	}
+
+	const newPosts = prevPosts.map((p) =>
+		p.dateCreated === date ? { ...p, comments: [...p.comments, newComment] } : { ...p },
+	)
+
+
+	Users.updateOne(
+		{ _id },
+		{
+			$set: {
+				posts: newPosts,
 			},
 		},
 		(err, result) => {

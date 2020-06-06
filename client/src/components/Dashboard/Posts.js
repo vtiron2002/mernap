@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react'
 import placeholderImage from '../../images/placeholderProfileImage.png'
 import { customFetch } from '../../api/fetch'
+import { toggleLike, isLiked } from '../../api/toggleLike'
 import { UserContext } from '../../UserContext'
+import { Comment } from '../../pages/User'
 
 export default function Posts() {
 	const { user, setUser } = useContext(UserContext)
@@ -17,7 +19,7 @@ export default function Posts() {
 		const newPost = {
 			postContent,
 			name: user.name,
-			dateCreated: new Date().toLocaleString(),
+			dateCreated: new Date(),
 			likes: [],
 			comments: [],
 		}
@@ -43,34 +45,6 @@ export default function Posts() {
 		})
 	}
 
-	const isLiked = (date) => {
-		const post = user.posts.find((p) => p.dateCreated === date)
-		return post.likes.includes(localStorage.email)
-	}
-
-	const toggleLike = (data) => {
-		const post = user.posts.find((p) => p.dateCreated === data.date)
-		const isLiked = post.likes.includes(localStorage.email)
-		if (!isLiked) {
-			customFetch({
-				url: '/data/likePost',
-				method: 'POST',
-				body: { ...data, posts: user.posts },
-			}).then(({ email }) => {
-				const posts = user.posts.map(
-					(p) => p.dateCreated === data.date ? { ...p, likes: [...p.likes, email] } : {...p},
-				)
-				setUser({ ...user, posts })
-			})
-		} else {
-			customFetch({
-				url: '/data/unlikePost',
-				method: 'POST',
-				body: { ...data, posts: user.posts },
-			}).then((res) => setUser({ ...user, posts: res.newPosts }))
-		}
-	}
-
 	return (
 		<div className='postsContainer'>
 			<div className='card'>
@@ -93,36 +67,83 @@ export default function Posts() {
 
 				<div>
 					{user.posts && user.posts.length ? (
-						[...user.posts].reverse().map((p, i) => (
-							<div key={i} className='post'>
-								<div className='postHeader'>
-									<img src={user.profilePic} alt='' />
-									<div>
-										<span>{p.name}</span>
-										<br />
-										<small className='text-muted'>{p.dateCreated}</small>
-									</div>
-									<button onClick={() => deletePost(p.dateCreated)} type='button'>
-										<span>×</span>
-									</button>
-								</div>
-
-								<div className='postBody'>
-									<p>{p.postContent}</p>
-
-									<small
-										onClick={() => toggleLike({ id: user._id, date: p.dateCreated })}
-										className={`text-muted likes ${isLiked(p.dateCreated) && 'liked'}`}
-									>
-										{p.likes.length} {p.likes.length > 1 || p.likes.length === 0 ? 'likes' : 'like'}
-									</small>
-									<small className='text-muted comments'>{p.comments.length} comments</small>
-								</div>
-							</div>
-						))
+						[...user.posts]
+							.reverse()
+							.map((p, i) => <Post p={p} key={i} user={user} setUser={setUser} />)
 					) : (
 						<h5 className='text-muted'>You have no posts</h5>
 					)}
+				</div>
+			</div>
+		</div>
+	)
+}
+
+const Post = ({ p, user, setUser, deletePost }) => {
+	const [commentsOpen, setCommentsOpen] = useState(false)
+	const [newComment, setNewComment] = useState('')
+
+	const submitComment = (e, p) => {
+		e.preventDefault()
+		if (!newComment.trim()) return
+		console.log('submited')
+		customFetch({
+			url: '/data/addComment',
+			body: { newComment, _id: user._id, date: p.dateCreated },
+			method: 'POST',
+		}).then((res) => {
+			setUser({ ...user, posts: res.newPosts })
+			setNewComment('')
+		})
+	}
+
+	return (
+		<div className='post'>
+			<div className='postHeader'>
+				<img src={user.profilePic} alt='' />
+				<div>
+					<span>{p.name}</span>
+					<br />
+					<small className='text-muted'>{new Date(p.dateCreated).toLocaleString()}</small>
+				</div>
+				<button onClick={() => deletePost(p.dateCreated)} type='button'>
+					<span>×</span>
+				</button>
+			</div>
+
+			<div className='postBody'>
+				<p>{p.postContent}</p>
+
+				<small
+					onClick={() => toggleLike({ id: user._id, date: p.dateCreated, user, setUser })}
+					className={`text-muted likes ${isLiked({ date: p.dateCreated, user }) && 'liked'}`}
+				>
+					{p.likes.length} {p.likes.length > 1 || p.likes.length === 0 ? 'likes' : 'like'}
+				</small>
+				<small
+					onClick={() => setCommentsOpen(!commentsOpen)}
+					className={`text-muted comments ${commentsOpen && 'commentsOpen'}`}
+				>
+					{p.comments.length}{' '}
+					{p.comments.length > 1 || p.comments.length === 0 ? 'comments' : 'comment'}
+				</small>
+			</div>
+
+			<div hidden={!commentsOpen} className='postComments'>
+				<form onSubmit={(e) => submitComment(e, p)}>
+					<input
+						value={newComment}
+						onChange={(e) => setNewComment(e.target.value)}
+						type='text'
+						className='form-control'
+						placeholder='Type a comment...'
+					/>
+				</form>
+
+				<div className='comments'>
+					{p.comments.map((c, i) => (
+						<Comment key={i} user={c} />
+					))}
 				</div>
 			</div>
 		</div>

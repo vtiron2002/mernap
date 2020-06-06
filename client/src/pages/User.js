@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
-
 import { useParams } from 'react-router-dom'
 import placeholderProfileImage from '../images/placeholderProfileImage.png'
-
 import { customFetch } from '../api/fetch'
-
 import Loading from '../components/Loading'
+import { toggleLike, isLiked } from '../api/toggleLike'
 
 export default function User() {
 	const [user, setUser] = useState({})
 	const [loading, setLoading] = useState(false)
+	const [newComment, setNewComment] = useState('')
 
 	const { id } = useParams()
 
@@ -23,33 +22,28 @@ export default function User() {
 
 	const firstName = (name) => {
 		if (name === undefined) return null
-
 		document.querySelector('title').innerText = `MERNAP - ${user.name}`
 		return name.split(' ')[0]
 	}
 
-	const toggleLike = (data) => {
-		const post = user.posts.find((p) => p.dateCreated === data.date)
-		const isLiked = post.likes.includes(localStorage.email)
-		if (!isLiked) {
-			customFetch({ url: '/data/likePost', method: 'POST', body: {...data, posts: user.posts} }).then(({ email }) => {
-				const posts = user.posts.map(
-					(p) => p.dateCreated === data.date ? { ...p, likes: [...p.likes, email] } : {...p},
-				)
-				setUser({ ...user, posts })
-			})
+	const toggleComments = (e) => {
+		if (e.target.parentElement.nextSibling.hasAttribute('hidden')) {
+			e.target.classList.add('commentsOpen')
+			e.target.parentElement.nextSibling.removeAttribute('hidden')
 		} else {
-			customFetch({
-				url: '/data/unlikePost',
-				method: 'POST',
-				body: { ...data, posts: user.posts },
-			}).then((res) => setUser({...user, posts: res.newPosts}))
+			e.target.classList.remove('commentsOpen')
+			e.target.parentElement.nextSibling.setAttribute('hidden', '')
 		}
 	}
 
-	const isLiked = (date) => {
-		const post = user.posts.find((p) => p.dateCreated === date)
-		return post.likes.includes(localStorage.email)
+	const submitComment = (e, p) => {
+		e.preventDefault()
+		if (!newComment.trim()) return
+		console.log("submited")
+		customFetch({ url: '/data/addComment', body: { newComment, _id: user._id, date: p.dateCreated }, method: 'POST' }).then(res => {
+			setUser({...user, posts: res.newPosts})
+			setNewComment('')
+		})
 	}
 
 	if (loading) return <Loading />
@@ -108,7 +102,7 @@ export default function User() {
 								<div>
 									<span>{p.name}</span>
 									<br />
-									<small className='text-muted'>{p.dateCreated}</small>
+									<small className='text-muted'>{new Date(p.dateCreated).toLocaleString()}</small>
 								</div>
 							</div>
 
@@ -116,16 +110,86 @@ export default function User() {
 								<p>{p.postContent}</p>
 
 								<small
-									onClick={() => toggleLike({ id: user._id, date: p.dateCreated })}
-									className={`text-muted likes ${isLiked(p.dateCreated) && 'liked'}`}
+									onClick={() => toggleLike({ id: user._id, date: p.dateCreated, user, setUser })}
+									className={`text-muted likes ${
+										isLiked({ date: p.dateCreated, user }) && 'liked'
+									}`}
 								>
 									{p.likes.length} {p.likes.length > 1 || p.likes.length === 0 ? 'likes' : 'like'}
 								</small>
-								<small className='text-muted comments'>{p.comments.length} comments</small>
+								<small onClick={toggleComments} className='text-muted comments'>
+									{p.comments.length}{' '}
+									{p.comments.length > 1 || p.comments.length === 0 ? 'comments' : 'comment'}
+								</small>
+							</div>
+
+							<div hidden={true} className='postComments'>
+								<form onSubmit={(e) => submitComment(e, p)}>
+									<input
+										value={newComment}
+										onChange={(e) => setNewComment(e.target.value)}
+										type='text'
+										className='form-control'
+										placeholder='Type a comment...'
+									/>
+								</form>
+
+								<div className='comments'>
+									{p.comments.map((c, i) => (
+										<Comment key={i} user={c} />
+									))}
+								</div>
 							</div>
 						</div>
 					))}
 			</div>
 		</div>
 	)
+}
+
+const Comment = ({ user }) => {
+	const showDate = (dateCreated) => {
+		var periods = {
+			month: 30 * 24 * 60 * 60 * 1000,
+			week: 7 * 24 * 60 * 60 * 1000,
+			day: 24 * 60 * 60 * 1000,
+			hour: 60 * 60 * 1000,
+			minute: 60 * 1000,
+		}
+		var diff = Date.now() - new Date(dateCreated)
+
+		if (diff > periods.month) {
+			// it was at least a month ago
+			return Math.floor(diff / periods.month) + 'm'
+		} else if (diff > periods.week) {
+			return Math.floor(diff / periods.week) + 'w'
+		} else if (diff > periods.day) {
+			return Math.floor(diff / periods.day) + 'd'
+		} else if (diff > periods.hour) {
+			return Math.floor(diff / periods.hour) + 'h'
+		} else if (diff > periods.minute) {
+			return Math.floor(diff / periods.minute) + 'm'
+		}
+		return 'Just now'
+	}
+
+	return (
+		<div  className='comment'>
+			<div className='commentHeader'>
+				<img src={user.profilePic ? user.profilePic : placeholderProfileImage} alt='' />
+				<div>
+					<a href={`/user/${user._id}`}>{user.name}</a>
+					<br />
+					<small className='text-muted'>{showDate(user.dateCreated)}</small>
+				</div>
+			</div>
+			<div className='commentBody'>
+				<p>{user.content}</p>
+			</div>
+		</div>
+	)
+}
+
+export {
+	Comment
 }

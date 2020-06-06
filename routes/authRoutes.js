@@ -9,7 +9,7 @@ const Users = require('../models/Users')
 const createTokenSendRes = async (user, res) => {
 	try {
 		const token = await jwt.sign({ name: user.name, email: user.email }, process.env.JWT_SECRET, {
-			expiresIn: '1hr',
+			expiresIn: '4hr',
 		})
 		res.json({ token })
 	} catch (e) {

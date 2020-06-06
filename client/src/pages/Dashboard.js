@@ -54,7 +54,6 @@ export default function Dashboard() {
 		setEditProfile(!editProfile)
 	}
 
-	// if (localStorage.token) {
 	if (userLoading) return <Loading />
 
 	return (
@@ -67,7 +66,4 @@ export default function Dashboard() {
 			<Notes />
 		</div>
 	)
-	// } else {
-	// return <Redirect to='/' />
-	// }
 }
