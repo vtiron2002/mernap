@@ -13,6 +13,10 @@ export default function SearchUsers() {
 	const [message, setMessage] = useState('')
 
 	useEffect(() => {
+		getUsers()
+	}, [])
+
+	useEffect(() => {
 		if (users.length !== 0) {
 			setMessage(`${users.length} ${users.length === 1 ? 'user' : 'users'} found!`)
 		}
