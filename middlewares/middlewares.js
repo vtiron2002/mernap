@@ -28,11 +28,12 @@ const isLoggedIn = (req, res, next) => {
 		next();
 	} else {
 		res.json({ message: '🚫 Not logged in 🚫' });
-
 	}
 };
+
+
 
 module.exports = {
 	checkTokenSetData,
 	isLoggedIn,
-};
+}

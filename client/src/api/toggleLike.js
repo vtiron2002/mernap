@@ -6,23 +6,11 @@ const isLiked = ({ date, user }) => {
 }
 
 const toggleLike = ({ id, date, user, setUser }) => {
-	const body = { id, date, posts: user.posts }
+	const body = { id, date, isLiked: isLiked({ date, user }) }
 
-	if (!isLiked({ date, user })) {
-		customFetch({
-			url: '/data/likePost',
-			method: 'POST',
-			body,
-		}).then(({ newPosts }) => {
-			setUser({ ...user, posts: newPosts })
-		})
-	} else {
-		customFetch({
-			url: '/data/unlikePost',
-			method: 'POST',
-			body,
-		}).then((res) => setUser({ ...user, posts: res.newPosts }))
-	}
+	customFetch({ url: '/data/toggleLike', method: 'POST', body }).then(({ newPosts }) =>
+		setUser({ ...user, posts: newPosts }),
+	)
 }
 
 export { isLiked, toggleLike }

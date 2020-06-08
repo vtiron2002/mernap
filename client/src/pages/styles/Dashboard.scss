@@ -176,7 +176,7 @@
 					padding: 0.7rem 1.5rem;
 
 					.postHeader {
-						@include flex(space-between, stretch);
+						@include flex(flex-start, stretch);
 
 						img {
 							max-width: 50px;
@@ -222,6 +222,7 @@
 						.comments {
 							cursor: pointer;
 							transition: 0.1s ease;
+							user-select: none;
 
 							&:hover,
 							&:active {
@@ -245,7 +246,7 @@
 						input {
 							font-size: 0.9rem !important;
 						}
-						
+
 						.comments {
 							.comment {
 								.commentHeader {

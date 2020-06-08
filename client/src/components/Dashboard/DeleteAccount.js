@@ -22,13 +22,12 @@ export default function DeleteAccount({ modal, setModal, user }) {
 				url: '/data/deleteAccount',
 				method: 'POST',
 				body: { id: user._id },
-			}).then((res) => {
-				if (res.status === 'ok') {
+			}).then(({ result }) => {
+				if (result) {
 					delete localStorage.token
-					window.location.href = '/'
+					delete localStorage.email
 					setUser({})
-				} else {
-					setModalMsg(res.message)
+					window.location.href = '/'
 				}
 			})
 		} catch (e) {

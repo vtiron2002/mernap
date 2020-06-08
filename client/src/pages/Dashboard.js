@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Redirect } from 'react-router-dom'
-
 import { EditProfile, ProfileInfo, Notes, Posts } from '../components/Dashboard'
-
 import { customFetch } from '../api/fetch'
-
+import { jwtVerify } from '../api/jwtVerify'
 import { UserContext } from '../UserContext'
 
-import Loader from '../components/Loader'
 import Loading from '../components/Loading'
 
 export default function Dashboard() {
@@ -34,18 +30,12 @@ export default function Dashboard() {
 		}
 		setUserData()
 
-		const checkJWT = async () => {
-			await customFetch({
-				method: 'POST',
-				url: '/auth/checkJWT',
-				body: { token },
-				auth: false,
-			}).then((res) => {
-				if (res.err) {
-					delete localStorage.token
-					delete localStorage.email
-				}
-			})
+		const checkJWT = () => {
+			if (!jwtVerify(token)) {
+				delete localStorage.token
+				delete localStorage.email
+				window.location.href = '/'
+			}
 		}
 		checkJWT()
 	}, [])

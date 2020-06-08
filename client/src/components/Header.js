@@ -1,10 +1,9 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { UserContext } from '../UserContext'
-
+import { jwtVerify } from '../api/jwtVerify'
 
 export default function Header() {
-	const { user, userLoading } = useContext(UserContext)
+	const isLoggedIn = jwtVerify(localStorage.token)
 
 	const logout = () => {
 		delete localStorage.token
@@ -30,7 +29,7 @@ export default function Header() {
 					MERNAP
 				</Link>
 
-				{localStorage.token && (
+				{isLoggedIn && (
 					<>
 						<input type='checkbox' id='check' />
 						<label onClick={toggleMenu} htmlFor='check' className='checkbtn'>

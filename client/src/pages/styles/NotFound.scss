@@ -1,0 +1,11 @@
+@import '../../styles/variables.scss';
+
+.notFound {
+  .card {
+    h1 {
+      @include headerText;
+      text-align: center;
+      font-size: 2rem;
+    }
+  }
+}

@@ -9,7 +9,7 @@ const Users = require('../models/Users')
 const createTokenSendRes = async (user, res) => {
 	try {
 		const token = await jwt.sign({ name: user.name, email: user.email }, process.env.JWT_SECRET, {
-			expiresIn: '4hr',
+			expiresIn: '1h',
 		})
 		res.json({ token })
 	} catch (e) {
@@ -43,28 +43,6 @@ route.post('/register', async (req, res) => {
 	} catch (e) {
 		res.json({ message: e.message })
 	}
-
-	// if (password === confirmPassword) {
-	// 	Users.find({ email }, (err, result) => {
-	// 		if (result.length === 0) {
-	// 			bcrypt.hash(password, 10, (err, hashedPassword) => {
-	// 				const newUser = {
-	// 					name,
-	// 					email,
-	// 					password: hashedPassword,
-	// 				}
-
-	// 				Users.create(newUser, (err, user) => {
-	// 					createTokenSendRes(user, res)
-	// 				})
-	// 			})
-	// 		} else {
-	// 			res.json({ message: `An account with that email already exists.` })
-	// 		}
-	// 	})
-	// } else {
-	// 	res.send({ message: `Passwords don't match.` })
-	// }
 })
 
 route.post('/login', async (req, res) => {
@@ -86,17 +64,5 @@ route.post('/login', async (req, res) => {
 	}
 })
 
-route.post('/checkJWT', (req, res) => {
-	const { token } = req.body
-	if (token) {
-		jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-			if (err) {
-				res.json({ err })
-			} else {
-				res.json({ user })
-			}
-		})
-	}
-})
 
 module.exports = route

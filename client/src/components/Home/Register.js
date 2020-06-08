@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import React, { useState } from 'react'
 import { customFetch } from '../../api/fetch'
 
 import Loader from '../Loader'

@@ -17,7 +17,7 @@
 		.card {
 			@include flex(stretch, stretch);
 			border: none;
-			padding: 0.5rem 1rem;
+			padding: 0.5rem ;
       transition: 0.2s ease;
       min-height: 100px;
       max-height: 100px;

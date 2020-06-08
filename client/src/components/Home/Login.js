@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Link, Redirect, useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
 
 import Loader from '../Loader'
 
 import { customFetch } from '../../api/fetch'
-import { UserContext } from '../../UserContext'
 
 export default function Login() {
-	const history = useHistory()
-
 	const [loginInfo, setLoginInfo] = useState({
 		email: '',
 		password: '',

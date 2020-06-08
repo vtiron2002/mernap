@@ -6,7 +6,7 @@
 @import '../pages/styles/Dashboard.scss';
 @import '../pages/styles/SearchUsers.scss';
 @import '../pages/styles/User.scss';
-
+@import '../pages/styles/NotFound.scss';
 
 @import '../styles/responsive.scss';
 
@@ -105,12 +105,11 @@ textarea {
 	min-width: 100%;
 	max-width: 100%;
 	resize: none;
-
 }
 
 .badge {
 	background: $mainColor;
-	padding: .2rem .8rem;
+	padding: 0.2rem 0.8rem;
 	font-size: 1rem;
 	border-radius: 8px;
 	color: $whiteText;
