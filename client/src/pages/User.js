@@ -4,6 +4,7 @@ import placeholderProfileImage from '../images/placeholderProfileImage.png'
 import { customFetch } from '../api/fetch'
 import Loading from '../components/Loading'
 import Post from '../components/Post'
+import ProfileInfo from '../components/ProfileInfo'
 
 export default function User() {
 	const [user, setUser] = useState({})
@@ -28,47 +29,8 @@ export default function User() {
 	if (loading) return <Loading />
 	return (
 		<div className='userContainer container'>
-			<div className='userInfo'>
-				<div className='card'>
-					<img
-						src={user.profilePic ? user.profilePic : placeholderProfileImage}
-						alt='profile-pic'
-					/>
-					<div>
-						<h5 className='card-title'>{user.name}</h5>
-						<div
-							style={{
-								textOverflow: 'ellipsis',
-								overflow: 'hidden',
-								maxHeight: '100%',
-								maxWidth: '100%',
-								whiteSpace: 'nowrap',
-							}}
-						>
-							<span>{user.bio}</span>
-						</div>
-					</div>
-				</div>
+			<ProfileInfo user={user} />
 
-				{/* ///////////////////////////////////////////////////////////////////////////////////////////////// */}
-
-				<div className='card'>
-					<div className='card-header'>
-						<h3>User Info</h3>
-					</div>
-					<hr />
-
-					<div className='card-body'>
-						<h5 className='card-title'>{user.name}</h5>
-						<p>{user.bio}</p>
-					</div>
-					<div className='card-footer'>
-						<span className='text-muted'>
-							Account created: {new Date(user.date_created).toLocaleString()}
-						</span>
-					</div>
-				</div>
-			</div>
 
 			<div className='userPosts'>
 				<h4>{firstName(user.name)}'s posts</h4>

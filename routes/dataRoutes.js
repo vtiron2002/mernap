@@ -99,9 +99,10 @@ route.post('/getUsers', async (req, res) => {
 	if (!search.toString().trim()) {
 		let filteredUsers = []
 		users.forEach((user) => {
-			const { bio, posts, _id, date_created, name, profilePic } = user
-			filteredUsers.push({ bio, posts, _id, date_created, name, profilePic })
+			const { bio, _id, date_created, name, profilePic, followers, following, email } = user
+			filteredUsers.push({ bio, _id, date_created, name, profilePic, followers, following, email })
 		})
+		console.log('got filteredUsers')
 
 		return res.json({ users: filteredUsers })
 	}
@@ -113,9 +114,19 @@ route.post('/getUsers', async (req, res) => {
 
 	let newFoundUsers = []
 	foundUsers.forEach((user) => {
-		const { bio, notes, posts, _id, date_created, name, profilePic } = user.item
-		newFoundUsers.push({ bio, notes, posts, _id, date_created, name, profilePic })
+		const { bio, _id, date_created, name, profilePic, followers, following, email } = user.item
+		newFoundUsers.push({
+			bio,
+			_id,
+			date_created,
+			name,
+			profilePic,
+			followers,
+			following,
+			email,
+		})
 	})
+	console.log('got newFoundUsers')
 
 	res.json({ users: newFoundUsers })
 })
@@ -124,7 +135,7 @@ route.post('/getUser', async (req, res) => {
 	const { id } = req.body
 	const users = await Users.find({ _id: id })
 	const user = users[0]
-	const { bio, posts, _id, date_created, name, profilePic } = user
+	const { bio, posts, _id, date_created, name, profilePic, followers, following } = user
 	res.json({
 		user: {
 			bio,
@@ -133,6 +144,8 @@ route.post('/getUser', async (req, res) => {
 			date_created,
 			name,
 			profilePic,
+			followers,
+			following,
 		},
 	})
 })
@@ -203,6 +216,62 @@ route.post('/addComment', async (req, res) => {
 		},
 	)
 	res.json({ newCommentToAdd: newComment })
+})
+
+route.post('/toggleFollow', async (req, res) => {
+	const { email } = req.user
+	const { selectedUserId, isFollowing } = req.body
+
+	const [clientUser] = await Users.find({ email })
+
+	const [selectedUser] = await Users.find({ _id: selectedUserId })
+
+	if (!isFollowing) {
+		// add to following for client user
+		await Users.updateOne(
+			{ email },
+			{
+				$push: {
+					following: [selectedUser.email],
+				},
+			},
+		)
+
+		// add to followers for selected user
+		await Users.updateOne(
+			{ _id: selectedUserId },
+			{
+				$push: {
+					followers: [email],
+				},
+			},
+		)
+
+		return res.json({ result: 'Followed' })
+	} else {
+		// remove from following for client user
+		const newFollowing = clientUser.following.filter((f) => f !== selectedUser.email)
+		await Users.updateOne(
+			{ email },
+			{
+				$set: {
+					following: newFollowing,
+				},
+			},
+		)
+
+		// remove from followers for selected user
+		const newFollowers = selectedUser.followers.filter((f) => f !== email)
+		await Users.updateOne(
+			{ _id: selectedUserId },
+			{
+				$set: {
+					followers: newFollowers,
+				},
+			},
+		)
+		return res.json({ result: 'Unfollowed' })
+	}
 })
 
 module.exports = route

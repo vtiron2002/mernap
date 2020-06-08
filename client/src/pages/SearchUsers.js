@@ -4,6 +4,7 @@ import Loader from '../components/Loader'
 import placeholderPic from '../images/placeholderProfileImage.png'
 
 import { Link } from 'react-router-dom'
+import FollowButton from '../components/FollowButton'
 
 export default function SearchUsers() {
 	const [users, setUsers] = useState([])
@@ -19,9 +20,8 @@ export default function SearchUsers() {
 		document.querySelector('title').innerText = `MERNAP - Search Users`
 	}, [users])
 
-	const submitSearch = (e) => {
+	const getUsers = () => {
 		setLoading(true)
-		e.preventDefault()
 		customFetch({ url: '/data/getUsers', method: 'POST', body: { search } }).then((res) => {
 			try {
 				if (res.message) throw Error(res.message)
@@ -34,6 +34,11 @@ export default function SearchUsers() {
 				setUsers([])
 			}
 		})
+	}
+
+	const submitSearch = (e) => {
+		e.preventDefault()
+		getUsers()
 	}
 
 	return (
@@ -59,10 +64,16 @@ export default function SearchUsers() {
 							<img src={u.profilePic ? u.profilePic : placeholderPic} alt='' />
 							<div className='info'>
 								<span>{u.name}</span>
+								<br />
 								<div>
-									<span>{u.bio}</span>
+									<span>
+										{u.followers.length}{' '}
+										{u.followers.length > 1 || u.followers.length === 0 ? 'Followers' : 'Follower'}
+									</span>
+									{u.following.length} Following
 								</div>
 							</div>
+							<FollowButton getUsers={getUsers} user={u} />
 						</Link>
 					))}
 			</div>

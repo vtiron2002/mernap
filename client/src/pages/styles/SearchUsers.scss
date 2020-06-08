@@ -15,12 +15,12 @@
 		@include grid(100%, minmax(100px, 100px), 1rem);
 
 		.card {
-			@include flex(stretch, stretch);
+			@include grid(5rem auto minmax(auto, 8rem), 1fr, 1rem);
 			border: none;
-			padding: 0.5rem ;
-      transition: 0.2s ease;
-      min-height: 100px;
-      max-height: 100px;
+			padding: 0.5rem;
+			transition: 0.2s ease;
+			min-height: 100px;
+			max-height: 100px;
 
 			&:hover {
 				background: darken($whiteText, 5%);
@@ -32,32 +32,24 @@
 
 			img {
 				max-height: 100%;
-        max-width: 100px;
-        min-width: 84px;
-        min-height: 100%;
+				max-width: 100%;
+				min-width: 100%;
+				min-height: 100%;
 				object-fit: cover;
 			}
 
 			.info {
 				@include flex(center, stretch, column);
-				margin-left: 1rem;
-        flex: 1;
-        max-width: 100%;
+				max-width: 14rem;
 
 				> span {
 					@include headerText;
+					align-self: flex-start;
 				}
 
-				div {
-					text-overflow: ellipsis;
-					overflow: hidden;
-					max-height: 100%;
-					max-width: 50%;
-					white-space: nowrap;
-
-					span {
-						white-space: nowrap;
-					}
+				> div {
+					@include grid(repeat(2, auto), 1fr, .1rem);
+					
 				}
 			}
 		}

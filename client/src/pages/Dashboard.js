@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { EditProfile, ProfileInfo, Notes, Posts } from '../components/Dashboard'
+import { EditProfile, Notes, Posts } from '../components/Dashboard'
+import ProfileInfo from '../components/ProfileInfo'
 import { customFetch } from '../api/fetch'
 import { jwtVerify } from '../api/jwtVerify'
 import { UserContext } from '../UserContext'
@@ -7,7 +8,7 @@ import { UserContext } from '../UserContext'
 import Loading from '../components/Loading'
 
 export default function Dashboard() {
-	const { setUser, setUserLoading, userLoading } = useContext(UserContext)
+	const { user, setUser, setUserLoading, userLoading } = useContext(UserContext)
 
 	const [editProfile, setEditProfile] = useState(false)
 	const [changesSavedMessage, setChangesSavedMessage] = useState('')
@@ -48,7 +49,12 @@ export default function Dashboard() {
 
 	return (
 		<div className='dashboardContainer container'>
-			<ProfileInfo toggleEdit={toggleEdit} changesSavedMessage={changesSavedMessage} />
+			<ProfileInfo
+				dashboard
+				toggleEdit={toggleEdit}
+				changesSavedMessage={changesSavedMessage}
+				user={user}
+			/>
 			{editProfile && (
 				<EditProfile toggleEdit={toggleEdit} setChangesSavedMessage={setChangesSavedMessage} />
 			)}

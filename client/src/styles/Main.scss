@@ -7,6 +7,8 @@
 @import '../pages/styles/SearchUsers.scss';
 @import '../pages/styles/User.scss';
 @import '../pages/styles/NotFound.scss';
+@import '../components/styles/ProfileInfo.scss';
+
 
 @import '../styles/responsive.scss';
 
@@ -124,5 +126,31 @@ textarea {
 		background: $mainColor;
 		color: $whiteText;
 		border-radius: $mainRadius;
+	}
+}
+
+
+.followButton {
+	@include flex(center, center);
+	background: none;
+	border: 2px solid $mainColor;
+	color: $darkText;
+	align-self: center;
+	padding: .5rem;
+
+	ion-icon {
+		font-size: 1rem;
+		margin-right: .4rem;
+	}
+
+	&:hover, &:active {
+		background: lighten($mainColor, 5%);
+		color: white !important;
+
+		span, ion-icon {
+			color: white;
+		}
+
+
 	}
 }
