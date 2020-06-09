@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { customFetch } from '../../api/fetch'
-import { UserContext } from '../../UserContext'
+import { UserContext } from '../../App'
 
 export default function DeleteAccount({ modal, setModal, user }) {
 	const { setUser } = useContext(UserContext)

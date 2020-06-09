@@ -3,7 +3,7 @@ import { EditProfile, Notes, Posts } from '../components/Dashboard'
 import ProfileInfo from '../components/ProfileInfo'
 import { customFetch } from '../api/fetch'
 import { jwtVerify } from '../api/jwtVerify'
-import { UserContext } from '../UserContext'
+import { UserContext } from '../App'
 
 import Loading from '../components/Loading'
 

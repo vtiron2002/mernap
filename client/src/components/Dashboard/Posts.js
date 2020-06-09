@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import placeholderImage from '../../images/placeholderProfileImage.png'
 import { customFetch } from '../../api/fetch'
-import { UserContext } from '../../UserContext'
+import { UserContext } from '../../App'
 import Post from '../Post'
 
 export default function Posts() {

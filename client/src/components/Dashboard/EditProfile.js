@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import DeleteAccount from './DeleteAccount'
-import { UserContext } from '../../UserContext'
+import { UserContext } from '../../App'
 
 import { customFetch } from '../../api/fetch'
 

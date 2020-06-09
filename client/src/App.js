@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, createContext } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import Header from './components/Header'
 
@@ -6,9 +6,9 @@ import { jwtVerify } from './api/jwtVerify'
 
 import { Dashboard, Home, NotFound, SearchUsers, User } from './pages'
 
-import { UserContext } from './UserContext'
+const UserContext = createContext()
 
-export default function App() {
+const App = () => {
 	const [user, setUser] = useState({})
 	const [userLoading, setUserLoading] = useState(false)
 
@@ -36,3 +36,5 @@ export default function App() {
 		</Router>
 	)
 }
+
+export { App, UserContext }

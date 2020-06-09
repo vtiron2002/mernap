@@ -6,7 +6,7 @@ export default function ProfileInfo({ user, dashboard = false, toggleEdit, chang
 		<div className='profileInfoContainer'>
 			<div className='card'>
 				<img src={user.profilePic ? user.profilePic : placeholderProfileImage} alt='profile-pic' />
-				<div>
+				{/* <div>
 					<h5 className='card-title'>{user.name}</h5>
 					<div
 						style={{
@@ -19,7 +19,7 @@ export default function ProfileInfo({ user, dashboard = false, toggleEdit, chang
 					>
 						<span>{user.bio}</span>
 					</div>
-				</div>
+				</div> */}
 			</div>
 
 			{/* ///////////////////////////////////////////////////////////////////////////////////////////////// */}
