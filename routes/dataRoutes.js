@@ -185,23 +185,14 @@ route.post('/toggleLike', async (req, res) => {
 route.post('/addComment', async (req, res) => {
 	const { email, name } = req.user
 
-	const { _id, date } = req.body
+	res.json({ email })
+	const { _id, date, newComment } = req.body
 
-	const sender = await Users.find({ email })
-	const id = sender[0]._id
-	const profilePic = sender[0].profilePic
+	const [sender] = await Users.find({ email })
+	const id = sender._id
 
-	const reciever = await Users.find({ _id })
-	const prevPosts = reciever[0].posts
-
-	const newComment = {
-		_id: id,
-		name,
-		email,
-		profilePic,
-		content: req.body.newComment,
-		dateCreated: new Date(),
-	}
+	const [reciever] = await Users.find({ _id })
+	const prevPosts = reciever.posts
 
 	const newPosts = prevPosts.map((p) =>
 		p.dateCreated === date ? { ...p, comments: [...p.comments, newComment] } : { ...p },
@@ -215,7 +206,6 @@ route.post('/addComment', async (req, res) => {
 			},
 		},
 	)
-	res.json({ newCommentToAdd: newComment })
 })
 
 route.post('/toggleFollow', async (req, res) => {
@@ -271,6 +261,16 @@ route.post('/toggleFollow', async (req, res) => {
 			},
 		)
 		return res.json({ result: 'Unfollowed' })
+	}
+})
+
+route.post('/getPfp', async (req, res) => {
+	try {
+		const { email } = req.body
+		const [user] = await Users.find({ email })
+		res.json({ profilePic: user.profilePic })
+	} catch (e) {
+		console.log(e)
 	}
 })
 

@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import placeholderProfileImage from '../images/placeholderProfileImage.png'
+import { customFetch } from '../api/fetch'
 
 const Comment = ({ user }) => {
+	const [pfp, setPfp] = useState('')
+
+	useEffect(() => {
+		getImage()
+	}, [])
+
 	const showDate = (dateCreated) => {
 		var periods = {
 			month: 30 * 24 * 60 * 60 * 1000,
@@ -27,10 +34,18 @@ const Comment = ({ user }) => {
 		return 'Just now'
 	}
 
+	const getImage = () => {
+		customFetch({
+			method: 'POST',
+			body: { email: user.email },
+			url: '/data/getPfp',
+		}).then(({ profilePic }) => setPfp(profilePic))
+	}
+
 	return (
 		<div className='comment'>
 			<div className='commentHeader'>
-				<img src={user.profilePic ? user.profilePic : placeholderProfileImage} alt='' />
+				<img src={pfp ? pfp : placeholderProfileImage} alt='' />
 				<div>
 					<a href={`/user/${user._id}`}>{user.name}</a>
 					<br />

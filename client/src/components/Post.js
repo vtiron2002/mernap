@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { toggleLike, isLiked } from '../api/toggleLike'
 import Comment from '../components/Comment'
 import { customFetch } from '../api/fetch'
@@ -6,25 +6,34 @@ import placeholderImage from '../images/placeholderProfileImage.png'
 
 const Post = ({ p, user, setUser, deletePost, dashboard = false }) => {
 	const [commentsOpen, setCommentsOpen] = useState(false)
-	const [newComment, setNewComment] = useState('')
+	const [newCommentContent, setNewCommentContent] = useState('')
 
 	const submitComment = (e, p) => {
 		e.preventDefault()
-		if (!newComment.trim()) return
+		if (!newCommentContent.trim()) return
+
+		const newComment = {
+			name: user.name,
+			email: user.email,
+			content: newCommentContent,
+			dateCreated: new Date(),
+		}
+
 		customFetch({
 			url: '/data/addComment',
 			body: { newComment, _id: user._id, date: p.dateCreated },
 			method: 'POST',
-		}).then(({ newCommentToAdd }) => {
-			const newPosts = user.posts.map((post) =>
-				post.dateCreated === p.dateCreated
-					? { ...post, comments: [...post.comments, newCommentToAdd] }
-					: { ...post },
-			)
+		}).then(({email}) => newComment.email === email)
 
-			setUser({ ...user, posts: newPosts })
-			setNewComment('')
-		})
+		console.log(newComment)
+
+		const newPosts = user.posts.map((post) =>
+			post.dateCreated === p.dateCreated
+				? { ...post, comments: [...post.comments, newComment] }
+				: { ...post },
+		)
+		setUser({ ...user, posts: newPosts })
+		setNewCommentContent('')
 	}
 
 	return (
@@ -62,23 +71,25 @@ const Post = ({ p, user, setUser, deletePost, dashboard = false }) => {
 				</small>
 			</div>
 
-			<div hidden={!commentsOpen} className='postComments'>
-				<form onSubmit={(e) => submitComment(e, p)}>
-					<input
-						value={newComment}
-						onChange={(e) => setNewComment(e.target.value)}
-						type='text'
-						className='form-control'
-						placeholder='Type a comment...'
-					/>
-				</form>
+			{commentsOpen && (
+				<div className='postComments'>
+					<form onSubmit={(e) => submitComment(e, p)}>
+						<input
+							value={newCommentContent}
+							onChange={(e) => setNewCommentContent(e.target.value)}
+							type='text'
+							className='form-control'
+							placeholder='Type a comment...'
+						/>
+					</form>
 
-				<div className='comments'>
-					{[...p.comments].reverse().map((c, i) => (
-						<Comment key={i} user={c} />
-					))}
+					<div className='comments'>
+						{[...p.comments].reverse().map((c, i) => (
+							<Comment key={i} user={c} />
+						))}
+					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	)
 }

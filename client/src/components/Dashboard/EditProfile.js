@@ -4,6 +4,8 @@ import { UserContext } from '../../UserContext'
 
 import { customFetch } from '../../api/fetch'
 
+import Jimp from 'jimp'
+
 export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 	const { user, setUser } = useContext(UserContext)
 
@@ -35,6 +37,25 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 
 	const openModal = () => {
 		setModal(true)
+	}
+
+	const onImageSelect = ({ target }) => {
+		const [file] = target.files
+		console.log(file)
+		if (file) {
+			const reader = new FileReader()
+			reader.addEventListener('load', async ({ target }) => {
+				console.log(target.result)
+				const image = await Jimp.read(target.result).then((img) =>
+					img.resize(150, 150).quality(100),
+				)
+
+				image.getBase64Async(Jimp.AUTO).then((res) => setUser({ ...user, profilePic: res }))
+			})
+			reader.readAsDataURL(file)
+		} else {
+			setUser({ ...user, profilePic: '' })
+		}
 	}
 
 	return (
@@ -69,22 +90,7 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 							/>
 						</div>
 						<div className='form-group'>
-							<input
-								type='file'
-								id='profilePic'
-								onChange={(e) => {
-									const file = e.target.files[0]
-									if (file) {
-										const reader = new FileReader()
-										reader.addEventListener('load', (e) => {
-											setUser({ ...user, profilePic: e.target.result })
-										})
-										reader.readAsDataURL(file)
-									} else {
-										setUser({ ...user, profilePic: '' })
-									}
-								}}
-							/>
+							<input type='file' id='profilePic' onChange={onImageSelect} />
 						</div>
 					</form>
 				</div>

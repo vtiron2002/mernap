@@ -11,6 +11,12 @@
 
 	.editProfileContainer {
 		.card {
+			.card-header {
+				h3 {
+					@include headerText;
+				}
+			}
+			
 			@include flex(stretch, stretch, column);
 			.card-body {
 				flex: 1;
@@ -138,6 +144,7 @@
 							max-height: 50px;
 							min-height: 50px;
 							border-radius: 50%;
+							object-fit: cover;
 						}
 
 						> div {

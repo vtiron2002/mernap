@@ -32,6 +32,11 @@
 					@include headerText;
 				}
 
+				> span {
+					margin-left: auto;
+					margin-right: 1rem;
+				}
+
 				.rightSide {
 					@include grid(repeat(2, 1fr), 1fr, 1rem);
 					span {

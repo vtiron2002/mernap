@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import placeholderProfileImage from '../images/placeholderProfileImage.png'
 import { customFetch } from '../api/fetch'
 import Loading from '../components/Loading'
 import Post from '../components/Post'
@@ -13,6 +12,11 @@ export default function User() {
 	const { id } = useParams()
 
 	useEffect(() => {
+		if(user === undefined) {
+			delete localStorage.token
+			delete localStorage.email
+		}
+
 		setLoading(true)
 		customFetch({ url: `/data/getUser`, method: 'POST', body: { id } }).then((res) => {
 			setUser(res.user)
