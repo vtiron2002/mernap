@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { toggleLike, isLiked } from '../api/toggleLike'
 import Comment from '../components/Comment'
 import { customFetch } from '../api/fetch'
@@ -8,7 +8,7 @@ const Post = ({ p, user, setUser, deletePost, dashboard = false }) => {
 	const [commentsOpen, setCommentsOpen] = useState(false)
 	const [newCommentContent, setNewCommentContent] = useState('')
 
-	const submitComment = (e, p) => {
+	const submitComment = async (e, p) => {
 		e.preventDefault()
 		if (!newCommentContent.trim()) return
 
@@ -19,13 +19,13 @@ const Post = ({ p, user, setUser, deletePost, dashboard = false }) => {
 			dateCreated: new Date(),
 		}
 
-		customFetch({
+		const { email } = await customFetch({
 			url: '/data/addComment',
 			body: { newComment, _id: user._id, date: p.dateCreated },
 			method: 'POST',
-		}).then(({email}) => newComment.email === email)
+		})
 
-		console.log(newComment)
+		newComment.email = email
 
 		const newPosts = user.posts.map((post) =>
 			post.dateCreated === p.dateCreated
@@ -82,7 +82,6 @@ const Post = ({ p, user, setUser, deletePost, dashboard = false }) => {
 							placeholder='Type a comment...'
 						/>
 					</form>
-
 					<div className='comments'>
 						{[...p.comments].reverse().map((c, i) => (
 							<Comment key={i} user={c} />

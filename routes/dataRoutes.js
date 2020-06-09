@@ -51,7 +51,7 @@ route.post('/editProfile', async (req, res) => {
 	const { email } = req.user
 	const data = req.body
 
-	await Users.updateOne({ email }, { $set: data })
+	Users.updateOne({ email }, { $set: data })
 })
 
 route.post('/deleteAccount', async (req, res) => {

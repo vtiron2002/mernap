@@ -18,18 +18,18 @@ export default function DeleteAccount({ modal, setModal, user }) {
 			if (user.email !== email) throw Error(`Doesn't match email`)
 
 			setModalMsg('')
-			await customFetch({
+			const { result } = await customFetch({
 				url: '/data/deleteAccount',
 				method: 'POST',
 				body: { id: user._id },
-			}).then(({ result }) => {
-				if (result) {
-					delete localStorage.token
-					delete localStorage.email
-					setUser({})
-					window.location.href = '/'
-				}
 			})
+
+			if (result) {
+				delete localStorage.token
+				delete localStorage.email
+				setUser({})
+				window.location.href = '/'
+			}
 		} catch (e) {
 			setModalMsg(e.message)
 		}

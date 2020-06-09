@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import Loader from '../Loader'
 
-import { customFetch } from '../../api/fetch'
+import { customFetch, homeFetch } from '../../api/fetch'
 
 export default function Login() {
 	const [loginInfo, setLoginInfo] = useState({
@@ -21,20 +21,7 @@ export default function Login() {
 		setLoading(true)
 		setError('')
 
-		await customFetch({
-			url: '/auth/login',
-			method: 'POST',
-			body: loginInfo,
-			auth: false,
-		}).then(async (res) => {
-			if (res.message) {
-				setError(res.message)
-				setLoading(false)
-			} else {
-				localStorage.token = res.token
-				window.location.href = '/dashboard'
-			}
-		})
+		homeFetch({ type: 'login', setError, setLoading, loginInfo })
 	}
 
 	return (

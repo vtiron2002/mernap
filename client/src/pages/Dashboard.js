@@ -19,14 +19,13 @@ export default function Dashboard() {
 
 		const setUserData = async () => {
 			setUserLoading(true)
-			await customFetch({ url: '/data/get' }).then(async (user) => {
-				if (user.err) {
-					return
-				} else {
-					setUser(user)
-					localStorage.email = user.email
-				}
-			})
+			const user = await customFetch({ url: '/data/get' })
+			if (user.err) {
+				return
+			} else {
+				setUser(user)
+				localStorage.email = user.email
+			}
 			setUserLoading(false)
 		}
 		setUserData()

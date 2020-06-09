@@ -20,9 +20,8 @@ export default function Notes() {
 			...newNote,
 			created_at: new Date(),
 		}
-		await customFetch({ method: 'POST', body, url: '/data/addNote' }).then((res) =>
-			setUser({ ...user, notes: [...user.notes, res] }),
-		)
+		const res = await customFetch({ method: 'POST', body, url: '/data/addNote' })
+		setUser({ ...user, notes: [...user.notes, res] })
 		setNewNote({
 			name: '',
 			note: '',
@@ -30,11 +29,12 @@ export default function Notes() {
 	}
 
 	const removeNote = async (date) => {
-		await customFetch({
+		const notes = await customFetch({
 			method: 'DELETE',
 			body: { date },
 			url: '/data/removeNote',
-		}).then((res) => setUser({ ...user, notes: res }))
+		})
+		setUser({ ...user, notes })
 	}
 
 	return (

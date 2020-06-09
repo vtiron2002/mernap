@@ -23,25 +23,23 @@ export default function Posts() {
 			comments: [],
 		}
 
-		await customFetch({
+		const res = await customFetch({
 			url: '/data/addPost',
 			body: newPost,
 			method: 'POST',
-		}).then((res) => {
-			setUser({ ...user, posts: [...user.posts, res] })
 		})
+		setUser({ ...user, posts: [...user.posts, res] })
 
 		setPostContent('')
 	}
 
 	const deletePost = async (date) => {
-		await customFetch({
+		const posts = await customFetch({
 			url: '/data/deletePost',
 			body: { date },
 			method: 'POST',
-		}).then((res) => {
-			setUser({ ...user, posts: res })
 		})
+		setUser({ ...user, posts })
 	}
 
 	return (

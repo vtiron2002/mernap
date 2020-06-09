@@ -25,7 +25,7 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 
 	const onSubmitChanges = (e) => {
 		e.preventDefault()
-		customFetch({ url: '/data/editProfile', method: 'POST', body: user }).then()
+		customFetch({ url: '/data/editProfile', method: 'POST', body: user })
 
 		toggleEdit()
 		setChangesSavedMessage('Changes Saved!')

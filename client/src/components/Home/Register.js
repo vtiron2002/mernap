@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { customFetch } from '../../api/fetch'
+import { customFetch, homeFetch } from '../../api/fetch'
 
 import Loader from '../Loader'
 
@@ -22,20 +22,7 @@ export default function Register() {
 		setLoading(true)
 		setError('')
 
-		await customFetch({
-			url: '/auth/register',
-			method: 'POST',
-			auth: false,
-			body: registerInfo,
-		}).then((res) => {
-			if (res.message) {
-				setLoading(false)
-				setError(res.message)
-			} else {
-				localStorage.token = res.token
-				window.location.href = '/dashboard'
-			}
-		})
+		homeFetch({ type: 'register', setError, setLoading, registerInfo })
 	}
 
 	return (

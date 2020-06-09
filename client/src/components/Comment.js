@@ -34,12 +34,13 @@ const Comment = ({ user }) => {
 		return 'Just now'
 	}
 
-	const getImage = () => {
-		customFetch({
+	const getImage = async () => {
+		const { profilePic } = await customFetch({
 			method: 'POST',
 			body: { email: user.email },
 			url: '/data/getPfp',
-		}).then(({ profilePic }) => setPfp(profilePic))
+		})
+		setPfp(profilePic)
 	}
 
 	return (

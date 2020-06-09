@@ -12,17 +12,20 @@ export default function User() {
 	const { id } = useParams()
 
 	useEffect(() => {
-		if(user === undefined) {
+		if (user === undefined) {
 			delete localStorage.token
 			delete localStorage.email
 		}
 
 		setLoading(true)
-		customFetch({ url: `/data/getUser`, method: 'POST', body: { id } }).then((res) => {
-			setUser(res.user)
-			setLoading(false)
-		})
+		getUser()
 	}, [])
+
+	const getUser = async () => {
+		const res = await customFetch({ url: `/data/getUser`, method: 'POST', body: { id } })
+		setUser(res.user)
+		setLoading(false)
+	}
 
 	const firstName = (name) => {
 		if (name === undefined) return null
@@ -35,14 +38,13 @@ export default function User() {
 		<div className='userContainer container'>
 			<ProfileInfo user={user} />
 
-
 			<div className='userPosts'>
 				<h4>{firstName(user.name)}'s posts</h4>
 
 				{user.posts &&
 					[...user.posts]
 						.reverse()
-						.map((p, i) => <Post p={p} i={i} user={user} setUser={setUser} />)}
+						.map((p, i) => <Post key={i} p={p} i={i} user={user} setUser={setUser} />)}
 			</div>
 		</div>
 	)
