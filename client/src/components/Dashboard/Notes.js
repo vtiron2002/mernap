@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react'
 import { UserContext } from '../../App'
 import { customFetch } from '../../api/fetch'
 
+import Card from '../Card'
+
 export default function Notes() {
 	const { user, setUser } = useContext(UserContext)
 
@@ -40,7 +42,7 @@ export default function Notes() {
 	return (
 		<>
 			<div className='notesContainer'>
-				<div className='card'>
+				<Card>
 					<div className='notesHeader'>
 						<div>New note</div>
 					</div>
@@ -71,9 +73,9 @@ export default function Notes() {
 							</button>
 						</form>
 					</div>
-				</div>
+				</Card>
 
-				<div className='card'>
+				<Card>
 					<div>
 						<h5>Your notes</h5>
 						{user.notes && <span className='badge badge-primary'>{user.notes.length}</span>}
@@ -100,7 +102,7 @@ export default function Notes() {
 								</React.Fragment>
 							))}
 					</div>
-				</div>
+				</Card>
 			</div>
 		</>
 	)

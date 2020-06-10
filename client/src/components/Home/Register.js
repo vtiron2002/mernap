@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { customFetch, homeFetch } from '../../api/fetch'
 
 import Loader from '../Loader'
+import Card from '../Card'
 
 export default function Register() {
 	const [registerInfo, setRegisterInfo] = useState({
@@ -26,7 +27,7 @@ export default function Register() {
 	}
 
 	return (
-		<div className='register card'>
+		<Card>
 			<h2>Register</h2>
 			<hr />
 			<form onSubmit={onSubmit}>
@@ -84,6 +85,6 @@ export default function Register() {
 					Register
 				</button>
 			</form>
-		</div>
+		</Card>
 	)
 }

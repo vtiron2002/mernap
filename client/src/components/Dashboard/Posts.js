@@ -3,6 +3,7 @@ import placeholderImage from '../../images/placeholderProfileImage.png'
 import { customFetch } from '../../api/fetch'
 import { UserContext } from '../../App'
 import Post from '../Post'
+import Card from '../Card'
 
 export default function Posts() {
 	const { user, setUser } = useContext(UserContext)
@@ -44,7 +45,7 @@ export default function Posts() {
 
 	return (
 		<div className='postsContainer'>
-			<div className='card'>
+			<Card>
 				<div>
 					<img src={user.profilePic ? user.profilePic : placeholderImage} alt='' />
 
@@ -80,7 +81,7 @@ export default function Posts() {
 						<h5 className='text-muted'>You have no posts</h5>
 					)}
 				</div>
-			</div>
+			</Card>
 		</div>
 	)
 }

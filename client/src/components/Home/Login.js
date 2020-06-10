@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Loader from '../Loader'
 
 import { customFetch, homeFetch } from '../../api/fetch'
+import Card from '../Card'
 
 export default function Login() {
 	const [loginInfo, setLoginInfo] = useState({
@@ -25,7 +26,7 @@ export default function Login() {
 	}
 
 	return (
-		<div className='login card'>
+		<Card>
 			<h2>Log in</h2>
 			<hr />
 
@@ -60,6 +61,6 @@ export default function Login() {
 					Log in
 				</button>
 			</form>
-		</div>
+		</Card>
 	)
 }

@@ -4,7 +4,7 @@
 		@include grid(250px auto, 300px, $gridGap);
 
 		.card:nth-child(1) {
-			padding: 0;
+			padding: 1rem;
 
 			img {
 				width: 100%;

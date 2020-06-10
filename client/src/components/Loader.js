@@ -1,7 +1,7 @@
 import React from 'react'
 import './styles/Loader.scss'
 
-export default function Loader({style}) {
+export default function Loader() {
 	return (
 		<div className='loader'>
 			<div></div>

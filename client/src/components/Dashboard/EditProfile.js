@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import DeleteAccount from './DeleteAccount'
+import Card from '../Card'
 import { UserContext } from '../../App'
 
 import { customFetch } from '../../api/fetch'
@@ -47,7 +48,7 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 			reader.addEventListener('load', async ({ target }) => {
 				console.log(target.result)
 				const image = await Jimp.read(target.result).then((img) =>
-					img.resize(150, 150).quality(100),
+					img.resize(200, 200).quality(100),
 				)
 
 				image.getBase64Async(Jimp.AUTO).then((res) => setUser({ ...user, profilePic: res }))
@@ -61,7 +62,7 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 	return (
 		<div className='editProfileContainer'>
 			<DeleteAccount modal={modal} setModal={setModal} user={user} />
-			<div className='card'>
+			<Card>
 				<div className='card-header'>
 					<h3>Edit Profile</h3>
 				</div>
@@ -102,7 +103,7 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 						Delete Account
 					</button>
 				</div>
-			</div>
+			</Card>
 		</div>
 	)
 }
