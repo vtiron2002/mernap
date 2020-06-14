@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { customFetch, homeFetch } from '../../api/fetch'
+import { customFetch } from '../../api/fetch'
 
 import Loader from '../Loader'
-import Card from '../Card'
 
 export default function Register() {
 	const [registerInfo, setRegisterInfo] = useState({
@@ -23,11 +22,24 @@ export default function Register() {
 		setLoading(true)
 		setError('')
 
-		homeFetch({ type: 'register', setError, setLoading, registerInfo })
+		await customFetch({
+			url: '/auth/register',
+			method: 'POST',
+			auth: false,
+			body: registerInfo,
+		}).then((res) => {
+			if (res.message) {
+				setLoading(false)
+				setError(res.message)
+			} else {
+				localStorage.token = res.token
+				window.location.href = '/dashboard'
+			}
+		})
 	}
 
 	return (
-		<Card>
+		<div className='register card'>
 			<h2>Register</h2>
 			<hr />
 			<form onSubmit={onSubmit}>
@@ -85,6 +97,6 @@ export default function Register() {
 					Register
 				</button>
 			</form>
-		</Card>
+		</div>
 	)
 }

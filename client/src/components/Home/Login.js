@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 
 import Loader from '../Loader'
 
-import { customFetch, homeFetch } from '../../api/fetch'
-import Card from '../Card'
+import { customFetch } from '../../api/fetch'
 
 export default function Login() {
 	const [loginInfo, setLoginInfo] = useState({
@@ -22,11 +21,24 @@ export default function Login() {
 		setLoading(true)
 		setError('')
 
-		homeFetch({ type: 'login', setError, setLoading, loginInfo })
+		await customFetch({
+			url: '/auth/login',
+			method: 'POST',
+			body: loginInfo,
+			auth: false,
+		}).then(async (res) => {
+			if (res.message) {
+				setError(res.message)
+				setLoading(false)
+			} else {
+				localStorage.token = res.token
+				window.location.href = '/dashboard'
+			}
+		})
 	}
 
 	return (
-		<Card>
+		<div className='login card'>
 			<h2>Log in</h2>
 			<hr />
 
@@ -61,6 +73,6 @@ export default function Login() {
 					Log in
 				</button>
 			</form>
-		</Card>
+		</div>
 	)
 }

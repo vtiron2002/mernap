@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import placeholderProfileImage from '../images/placeholderProfileImage.png'
 import { customFetch } from '../api/fetch'
 import Loading from '../components/Loading'
 import Post from '../components/Post'
@@ -12,20 +13,12 @@ export default function User() {
 	const { id } = useParams()
 
 	useEffect(() => {
-		if (user === undefined) {
-			delete localStorage.token
-			delete localStorage.email
-		}
-
 		setLoading(true)
-		getUser()
+		customFetch({ url: `/data/getUser`, method: 'POST', body: { id } }).then((res) => {
+			setUser(res.user)
+			setLoading(false)
+		})
 	}, [])
-
-	const getUser = async () => {
-		const res = await customFetch({ url: `/data/getUser`, method: 'POST', body: { id } })
-		setUser(res.user)
-		setLoading(false)
-	}
 
 	const firstName = (name) => {
 		if (name === undefined) return null
@@ -44,7 +37,7 @@ export default function User() {
 				{user.posts &&
 					[...user.posts]
 						.reverse()
-						.map((p, i) => <Post key={i} p={p} i={i} user={user} setUser={setUser} />)}
+						.map((p, i) => <Post p={p} i={i} user={user} setUser={setUser} />)}
 			</div>
 		</div>
 	)

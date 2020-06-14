@@ -3,7 +3,7 @@ import { EditProfile, Notes, Posts } from '../components/Dashboard'
 import ProfileInfo from '../components/ProfileInfo'
 import { customFetch } from '../api/fetch'
 import { jwtVerify } from '../api/jwtVerify'
-import { UserContext } from '../App'
+import { UserContext } from '../UserContext'
 
 import Loading from '../components/Loading'
 
@@ -19,13 +19,14 @@ export default function Dashboard() {
 
 		const setUserData = async () => {
 			setUserLoading(true)
-			const user = await customFetch({ url: '/data/get' })
-			if (user.err) {
-				return
-			} else {
-				setUser(user)
-				localStorage.email = user.email
-			}
+			await customFetch({ url: '/data/get' }).then(async (user) => {
+				if (user.err) {
+					return
+				} else {
+					setUser(user)
+					localStorage.email = user.email
+				}
+			})
 			setUserLoading(false)
 		}
 		setUserData()

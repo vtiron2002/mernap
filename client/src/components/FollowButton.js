@@ -11,17 +11,18 @@ export default function FollowButton({ user, getUsers }) {
 	const { email } = localStorage
 	const follow = async (e) => {
 		e.preventDefault()
-		const { result } = await customFetch({
+		await customFetch({
 			url: '/data/toggleFollow',
 			body: { selectedUserId: user._id, isFollowing: checkFollowing() },
 			method: 'POST',
+		}).then(({ result }) => {
+			getUsers()
+			if (result === 'Followed') {
+				setFollowing(true)
+			} else {
+				setFollowing(false)
+			}
 		})
-		getUsers()
-		if (result === 'Followed') {
-			setFollowing(true)
-		} else {
-			setFollowing(false)
-		}
 	}
 
 	const checkFollowing = () => {

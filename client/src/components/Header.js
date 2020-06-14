@@ -14,10 +14,10 @@ export default function Header() {
 	let open = false
 	const toggleMenu = () => {
 		if (!open) {
-			document.body.style.overflow = 'hidden'
+			document.querySelector('body').style.overflow = 'hidden'
 			open = true
 		} else {
-			document.body.style.removeProperty('overflow')
+			document.querySelector('body').style.removeProperty('overflow')
 			open = false
 		}
 	}

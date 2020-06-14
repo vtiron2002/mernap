@@ -5,11 +5,12 @@ const isLiked = ({ date, user }) => {
 	return post.likes.includes(localStorage.email)
 }
 
-const toggleLike = async ({ id, date, user, setUser })  => {
+const toggleLike = ({ id, date, user, setUser }) => {
 	const body = { id, date, isLiked: isLiked({ date, user }) }
-	const {newPosts} = await customFetch({ url: '/data/toggleLike', method: 'POST', body })
 
-	setUser({ ...user, posts: newPosts })
+	customFetch({ url: '/data/toggleLike', method: 'POST', body }).then(({ newPosts }) =>
+		setUser({ ...user, posts: newPosts }),
+	)
 }
 
 export { isLiked, toggleLike }

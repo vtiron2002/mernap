@@ -6,34 +6,25 @@ import placeholderImage from '../images/placeholderProfileImage.png'
 
 const Post = ({ p, user, setUser, deletePost, dashboard = false }) => {
 	const [commentsOpen, setCommentsOpen] = useState(false)
-	const [newCommentContent, setNewCommentContent] = useState('')
+	const [newComment, setNewComment] = useState('')
 
-	const submitComment = async (e, p) => {
+	const submitComment = (e, p) => {
 		e.preventDefault()
-		if (!newCommentContent.trim()) return
-
-		const newComment = {
-			name: user.name,
-			email: user.email,
-			content: newCommentContent,
-			dateCreated: new Date(),
-		}
-
-		const { email } = await customFetch({
+		if (!newComment.trim()) return
+		customFetch({
 			url: '/data/addComment',
 			body: { newComment, _id: user._id, date: p.dateCreated },
 			method: 'POST',
+		}).then(({ newCommentToAdd }) => {
+			const newPosts = user.posts.map((post) =>
+				post.dateCreated === p.dateCreated
+					? { ...post, comments: [...post.comments, newCommentToAdd] }
+					: { ...post },
+			)
+
+			setUser({ ...user, posts: newPosts })
+			setNewComment('')
 		})
-
-		newComment.email = email
-
-		const newPosts = user.posts.map((post) =>
-			post.dateCreated === p.dateCreated
-				? { ...post, comments: [...post.comments, newComment] }
-				: { ...post },
-		)
-		setUser({ ...user, posts: newPosts })
-		setNewCommentContent('')
 	}
 
 	return (
@@ -71,24 +62,23 @@ const Post = ({ p, user, setUser, deletePost, dashboard = false }) => {
 				</small>
 			</div>
 
-			{commentsOpen && (
-				<div className='postComments'>
-					<form onSubmit={(e) => submitComment(e, p)}>
-						<input
-							value={newCommentContent}
-							onChange={(e) => setNewCommentContent(e.target.value)}
-							type='text'
-							className='form-control'
-							placeholder='Type a comment...'
-						/>
-					</form>
-					<div className='comments'>
-						{[...p.comments].reverse().map((c, i) => (
-							<Comment key={i} user={c} />
-						))}
-					</div>
+			<div hidden={!commentsOpen} className='postComments'>
+				<form onSubmit={(e) => submitComment(e, p)}>
+					<input
+						value={newComment}
+						onChange={(e) => setNewComment(e.target.value)}
+						type='text'
+						className='form-control'
+						placeholder='Type a comment...'
+					/>
+				</form>
+
+				<div className='comments'>
+					{[...p.comments].reverse().map((c, i) => (
+						<Comment key={i} user={c} />
+					))}
 				</div>
-			)}
+			</div>
 		</div>
 	)
 }

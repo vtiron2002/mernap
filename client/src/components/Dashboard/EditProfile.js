@@ -1,11 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react'
 import DeleteAccount from './DeleteAccount'
-import Card from '../Card'
-import { UserContext } from '../../App'
+import { UserContext } from '../../UserContext'
 
 import { customFetch } from '../../api/fetch'
-
-import Jimp from 'jimp'
 
 export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 	const { user, setUser } = useContext(UserContext)
@@ -26,7 +23,7 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 
 	const onSubmitChanges = (e) => {
 		e.preventDefault()
-		customFetch({ url: '/data/editProfile', method: 'POST', body: user })
+		customFetch({ url: '/data/editProfile', method: 'POST', body: user }).then()
 
 		toggleEdit()
 		setChangesSavedMessage('Changes Saved!')
@@ -40,29 +37,10 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 		setModal(true)
 	}
 
-	const onImageSelect = ({ target }) => {
-		const [file] = target.files
-		console.log(file)
-		if (file) {
-			const reader = new FileReader()
-			reader.addEventListener('load', async ({ target }) => {
-				console.log(target.result)
-				const image = await Jimp.read(target.result).then((img) =>
-					img.resize(200, 200).quality(100),
-				)
-
-				image.getBase64Async(Jimp.AUTO).then((res) => setUser({ ...user, profilePic: res }))
-			})
-			reader.readAsDataURL(file)
-		} else {
-			setUser({ ...user, profilePic: '' })
-		}
-	}
-
 	return (
 		<div className='editProfileContainer'>
 			<DeleteAccount modal={modal} setModal={setModal} user={user} />
-			<Card>
+			<div className='card'>
 				<div className='card-header'>
 					<h3>Edit Profile</h3>
 				</div>
@@ -91,7 +69,22 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 							/>
 						</div>
 						<div className='form-group'>
-							<input type='file' id='profilePic' onChange={onImageSelect} />
+							<input
+								type='file'
+								id='profilePic'
+								onChange={(e) => {
+									const file = e.target.files[0]
+									if (file) {
+										const reader = new FileReader()
+										reader.addEventListener('load', (e) => {
+											setUser({ ...user, profilePic: e.target.result })
+										})
+										reader.readAsDataURL(file)
+									} else {
+										setUser({ ...user, profilePic: '' })
+									}
+								}}
+							/>
 						</div>
 					</form>
 				</div>
@@ -103,7 +96,7 @@ export default function EditProfile({ setChangesSavedMessage, toggleEdit }) {
 						Delete Account
 					</button>
 				</div>
-			</Card>
+			</div>
 		</div>
 	)
 }

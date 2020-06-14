@@ -24,19 +24,20 @@ export default function SearchUsers() {
 		document.querySelector('title').innerText = `MERNAP - Search Users`
 	}, [users])
 
-	const getUsers = async () => {
+	const getUsers = () => {
 		setLoading(true)
-		const res = await customFetch({ url: '/data/getUsers', method: 'POST', body: { search } })
-		try {
-			if (res.message) throw Error(res.message)
-			setUsers(res.users)
-			setLoading(false)
-		} catch (e) {
-			setMessage(e.message)
-			setLoading(false)
-			setTimeout(() => setMessage(''), 2000)
-			setUsers([])
-		}
+		customFetch({ url: '/data/getUsers', method: 'POST', body: { search } }).then((res) => {
+			try {
+				if (res.message) throw Error(res.message)
+				setUsers(res.users)
+				setLoading(false)
+			} catch (e) {
+				setMessage(e.message)
+				setLoading(false)
+				setTimeout(() => setMessage(''), 2000)
+				setUsers([])
+			}
+		})
 	}
 
 	const submitSearch = (e) => {

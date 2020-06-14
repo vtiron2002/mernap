@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { customFetch } from '../../api/fetch'
-import { UserContext } from '../../App'
+import { UserContext } from '../../UserContext'
 
 export default function DeleteAccount({ modal, setModal, user }) {
 	const { setUser } = useContext(UserContext)
@@ -18,18 +18,18 @@ export default function DeleteAccount({ modal, setModal, user }) {
 			if (user.email !== email) throw Error(`Doesn't match email`)
 
 			setModalMsg('')
-			const { result } = await customFetch({
+			await customFetch({
 				url: '/data/deleteAccount',
 				method: 'POST',
 				body: { id: user._id },
+			}).then(({ result }) => {
+				if (result) {
+					delete localStorage.token
+					delete localStorage.email
+					setUser({})
+					window.location.href = '/'
+				}
 			})
-
-			if (result) {
-				delete localStorage.token
-				delete localStorage.email
-				setUser({})
-				window.location.href = '/'
-			}
 		} catch (e) {
 			setModalMsg(e.message)
 		}

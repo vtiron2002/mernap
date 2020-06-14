@@ -64,5 +64,4 @@ route.post('/login', async (req, res) => {
 	}
 })
 
-
 module.exports = route

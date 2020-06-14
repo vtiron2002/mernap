@@ -1,8 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { UserContext } from '../../App'
+import { UserContext } from '../../UserContext'
 import { customFetch } from '../../api/fetch'
-
-import Card from '../Card'
 
 export default function Notes() {
 	const { user, setUser } = useContext(UserContext)
@@ -22,8 +20,9 @@ export default function Notes() {
 			...newNote,
 			created_at: new Date(),
 		}
-		const res = await customFetch({ method: 'POST', body, url: '/data/addNote' })
-		setUser({ ...user, notes: [...user.notes, res] })
+		await customFetch({ method: 'POST', body, url: '/data/addNote' }).then((res) =>
+			setUser({ ...user, notes: [...user.notes, res] }),
+		)
 		setNewNote({
 			name: '',
 			note: '',
@@ -31,18 +30,17 @@ export default function Notes() {
 	}
 
 	const removeNote = async (date) => {
-		const notes = await customFetch({
+		await customFetch({
 			method: 'DELETE',
 			body: { date },
 			url: '/data/removeNote',
-		})
-		setUser({ ...user, notes })
+		}).then((res) => setUser({ ...user, notes: res }))
 	}
 
 	return (
 		<>
 			<div className='notesContainer'>
-				<Card>
+				<div className='card'>
 					<div className='notesHeader'>
 						<div>New note</div>
 					</div>
@@ -73,9 +71,9 @@ export default function Notes() {
 							</button>
 						</form>
 					</div>
-				</Card>
+				</div>
 
-				<Card>
+				<div className='card'>
 					<div>
 						<h5>Your notes</h5>
 						{user.notes && <span className='badge badge-primary'>{user.notes.length}</span>}
@@ -102,7 +100,7 @@ export default function Notes() {
 								</React.Fragment>
 							))}
 					</div>
-				</Card>
+				</div>
 			</div>
 		</>
 	)

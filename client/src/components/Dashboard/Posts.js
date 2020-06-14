@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react'
 import placeholderImage from '../../images/placeholderProfileImage.png'
 import { customFetch } from '../../api/fetch'
-import { UserContext } from '../../App'
+import { UserContext } from '../../UserContext'
 import Post from '../Post'
-import Card from '../Card'
 
 export default function Posts() {
 	const { user, setUser } = useContext(UserContext)
@@ -24,28 +23,30 @@ export default function Posts() {
 			comments: [],
 		}
 
-		const res = await customFetch({
+		await customFetch({
 			url: '/data/addPost',
 			body: newPost,
 			method: 'POST',
+		}).then((res) => {
+			setUser({ ...user, posts: [...user.posts, res] })
 		})
-		setUser({ ...user, posts: [...user.posts, res] })
 
 		setPostContent('')
 	}
 
 	const deletePost = async (date) => {
-		const posts = await customFetch({
+		await customFetch({
 			url: '/data/deletePost',
 			body: { date },
 			method: 'POST',
+		}).then((res) => {
+			setUser({ ...user, posts: res })
 		})
-		setUser({ ...user, posts })
 	}
 
 	return (
 		<div className='postsContainer'>
-			<Card>
+			<div className='card'>
 				<div>
 					<img src={user.profilePic ? user.profilePic : placeholderImage} alt='' />
 
@@ -81,7 +82,7 @@ export default function Posts() {
 						<h5 className='text-muted'>You have no posts</h5>
 					)}
 				</div>
-			</Card>
+			</div>
 		</div>
 	)
 }
